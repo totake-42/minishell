@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 02:00:48 by totake            #+#    #+#             */
-/*   Updated: 2025/12/01 13:12:16 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/02 14:05:34 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ t_token_type	detect_delimiter_type(char *str)
 		if (str[0] == '|')
 			return (T_PIPE);
 		if (str[0] == '<')
-			return (T_REDIR_IN);
+			return (T_REDIRECT_IN);
 		if (str[0] == '>')
-			return (T_REDIR_OUT);
+			return (T_REDIRECT_OUT);
 		return (T_INVALID);
 	}
 	if (str[2] == '\0')

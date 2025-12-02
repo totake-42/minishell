@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:52:58 by totake            #+#    #+#             */
-/*   Updated: 2025/12/01 11:50:38 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/02 16:13:15 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ int	main(int argc, char **argv, char **envp)
 			add_history(data.line);
 			lexer(&data);
 			print_tokens(data.token); // For debugging
+			parser(&data);
+			print_cmds(data.cmd); // For debugging
 		}
 		safe_free((void **)&data.line);
 	}

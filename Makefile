@@ -6,7 +6,7 @@
 #    By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/01 02:28:33 by totake            #+#    #+#              #
-#    Updated: 2025/12/01 02:28:35 by totake           ###   ########.fr        #
+#    Updated: 2025/12/02 16:09:31 by totake           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,9 @@ SRCS = main.c \
 	lexer_token_len.c \
 	expand.c \
 	expand_utils.c \
+	parser.c \
+	parser_argv.c \
+	parser_redirect.c \
 	debug.c
 
 OBJS = $(SRCS:.c=.o)
