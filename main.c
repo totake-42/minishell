@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:52:58 by totake            #+#    #+#             */
-/*   Updated: 2025/12/07 19:25:56 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/08 13:34:28 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int	main(int argc, char **argv, char **envp)
 		perror("init_data failed");
 		return (1);
 	}
+	set_signals();
 	while (1)
 	{
 		data.line = readline("minishell> ");

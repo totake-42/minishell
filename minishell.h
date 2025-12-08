@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:30:31 by totake            #+#    #+#             */
-/*   Updated: 2025/12/07 19:48:48 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/08 13:42:26 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <limits.h> //LONG_MAX, LONG_MIN
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <signal.h>   //sigaction(), sigemptyset()
 # include <stdbool.h>  //bool
 # include <stddef.h>   //size_t
 # include <stdio.h>    //perror()
@@ -180,6 +181,9 @@ int						handle_heredocs(t_cmd *cmd, t_data *data);
 int						execute_builtin(t_cmd *cmd, t_data *data);
 int						is_builtin(char *cmd);
 void					execute_single_builtin(t_data *data);
+
+/* ===== executer_builtin.c ===== */
+int						set_signals(void);
 
 /* ===== builtin_tmp.c ===== */
 int						builtin_echo(char **argv);
