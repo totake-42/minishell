@@ -6,7 +6,7 @@
 #    By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/01 02:28:33 by totake            #+#    #+#              #
-#    Updated: 2025/12/02 16:09:31 by totake           ###   ########.fr        #
+#    Updated: 2025/12/07 20:27:48 by totake           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,13 +16,14 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 LDFLAGS = -lreadline
 
+LIBFT_DIR = libft
+LIBFT = $(LIBFT_DIR)/libft.a
+
 SRCS = main.c \
-	ft_string.c \
-	ft_memory.c \
-	ft_io.c \
 	ft_append.c \
 	ft_free.c \
 	ft_error.c \
+	ft_mkstemp.c \
 	lexer.c \
 	lexer_ctype.c \
 	lexer_token_type.c \
@@ -32,23 +33,34 @@ SRCS = main.c \
 	parser.c \
 	parser_argv.c \
 	parser_redirect.c \
+	executer.c \
+	executer_pipe.c \
+	executer_builtin.c \
+	executer_child.c \
+	heredoc.c \
+	builtin_tmp.c \
 	debug.c
 
 OBJS = $(SRCS:.c=.o)
 
-all: $(NAME)
+all: $(LIBFT) $(NAME)
+
+$(LIBFT):
+	$(MAKE) -C $(LIBFT_DIR)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(LDFLAGS)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -I$(LIBFT_DIR) -c $< -o $@
 
 clean:
 	rm -f $(OBJS)
+	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
 	rm -f $(NAME)
+	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
@@ -57,7 +69,7 @@ test: test_lexer
 	./test_lexer
 
 test_lexer: test_lexer.c $(filter-out main.o, $(OBJS))
-	$(CC) $(CFLAGS) -o test_lexer test_lexer.c $(filter-out main.o, $(OBJS)) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I$(LIBFT_DIR) -o test_lexer test_lexer.c $(filter-out main.o, $(OBJS)) $(LIBFT) $(LDFLAGS)
 
 test_clean:
 	rm -f test_lexer

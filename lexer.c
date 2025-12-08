@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 20:26:54 by totake            #+#    #+#             */
-/*   Updated: 2025/12/01 12:23:47 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/06 19:26:01 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_token	*create_token_node(char *ptr, size_t len, t_data *data)
 	raw_str = ft_substr(ptr, 0, len);
 	token->type = detect_token_type(raw_str);
 	token->str = expand_raw_str(raw_str, data);
-	safe_free((void **)&raw_str);
+	token->raw_str = raw_str;
 	token->next = NULL;
 	return (token);
 }

@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 02:11:55 by totake            #+#    #+#             */
-/*   Updated: 2025/12/01 13:41:54 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/05 13:59:19 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ char	*extract_var_key(char *str)
 {
 	size_t	len;
 
+	if (str[0] == '?')
+		return (ft_strdup("?"));
 	len = 0;
 	while (str[len] && (ft_isalnum(str[len]) || str[len] == '_'))
 		len++;
@@ -49,20 +51,28 @@ char	*expand_dollar(char *str, size_t *i, t_data *data)
 	char	*value;
 
 	key = extract_var_key(&str[*i + 1]);
-	value = get_env_value(key, data);
-	*i += ft_strlen(key) + 1;
+	if (key[0] == '?' && key[1] == '\0')
+	{
+		value = ft_itoa(data->last_status);
+		*i += 2;
+	}
+	else
+	{
+		value = get_env_value(key, data);
+		*i += ft_strlen(key) + 1;
+	}
 	safe_free((void **)&key);
 	return (value);
 }
 
 char	*expand_str(char *str, t_data *data)
 {
-	char *res;
-	char *value;
-	size_t i;
-	size_t res_len;
+	char	*res;
+	char	*value;
+	size_t	i;
+	size_t	res_len;
 
-	res = (char *)xmalloc(1);
+	res = (char *)safe_alloc(1);
 	res[0] = '\0';
 	res_len = 0;
 	i = 0;

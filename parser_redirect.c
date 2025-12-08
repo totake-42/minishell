@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 16:41:07 by totake            #+#    #+#             */
-/*   Updated: 2025/12/02 16:42:50 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/06 19:42:58 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,10 @@ t_redirect	*create_redirect_node(t_token **token_ptr)
 	if (*token_ptr && (*token_ptr)->type == T_WORD)
 	{
 		redirect->filename = ft_strdup((*token_ptr)->str);
+		if ((*token_ptr)->raw_str != NULL && (*token_ptr)->raw_str[0] == '\'')
+			redirect->should_expand = 0;
+		else
+			redirect->should_expand = 1;
 		*token_ptr = (*token_ptr)->next;
 	}
 	redirect->next = NULL;

@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 00:00:00 by test              #+#    #+#             */
-/*   Updated: 2025/12/02 14:06:04 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/04 22:50:06 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ char	**create_test_envp(void)
 {
 	char	**envp;
 
-	envp = (char **)xmalloc(sizeof(char *) * 4);
+	envp = (char **)safe_alloc(sizeof(char *) * 4);
 	envp[0] = ft_strdup("USER=testuser");
 	envp[1] = ft_strdup("HOME=/home/testuser");
 	envp[2] = ft_strdup("PATH=/bin:/usr/bin");

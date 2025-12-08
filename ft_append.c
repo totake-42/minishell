@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 21:00:00 by totake            #+#    #+#             */
-/*   Updated: 2025/12/01 02:56:42 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/04 22:50:06 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*ft_charappend(char *str, char c, size_t *len)
 {
 	char	*new_str;
 
-	new_str = (char *)xmalloc(*len + 2);
+	new_str = (char *)safe_alloc(*len + 2);
 	ft_memcpy(new_str, str, *len);
 	new_str[*len] = c;
 	new_str[*len + 1] = '\0';
@@ -37,7 +37,7 @@ char	*ft_strappend(char *str, char *append_str, size_t *len)
 	if (!append_str)
 		return (str);
 	append_len = ft_strlen(append_str);
-	new_str = (char *)xmalloc(*len + append_len + 1);
+	new_str = (char *)safe_alloc(*len + append_len + 1);
 	if (!new_str)
 		return (str);
 	ft_memcpy(new_str, str, *len);

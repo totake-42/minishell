@@ -6,14 +6,17 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:30:31 by totake            #+#    #+#             */
-/*   Updated: 2025/12/02 16:48:36 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/07 19:48:48 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <fcntl.h> //open()
+# include "libft/libft.h"
+# include <errno.h>  //errno
+# include <fcntl.h>  //open()
+# include <limits.h> //LONG_MAX, LONG_MIN
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdbool.h>  //bool
@@ -38,6 +41,7 @@ typedef struct s_token
 {
 	t_token_type		type;
 	char				*str;
+	char				*raw_str;
 	struct s_token		*next;
 }						t_token;
 
@@ -53,6 +57,7 @@ typedef struct s_redirect
 {
 	t_redirect_type		type;
 	char				*filename;
+	int					should_expand;
 	struct s_redirect	*next;
 }						t_redirect;
 
@@ -60,6 +65,7 @@ typedef struct s_cmd
 {
 	char				**argv;
 	t_redirect			*redirect;
+	pid_t				pid;
 	struct s_cmd		*next;
 }						t_cmd;
 
@@ -69,29 +75,10 @@ typedef struct s_data
 	t_token				*token;
 	char				**envp;
 	t_cmd				*cmd;
+	size_t				cmd_count;
 	t_cmd				*cur_cmd;
 	int					last_status;
 }						t_data;
-
-/* ===== ft_string.c ===== */
-char					*ft_substr(char const *s, unsigned int start,
-							size_t len);
-char					*ft_strdup(const char *s);
-char					*ft_strchr(const char *s, int c);
-int						ft_strncmp(const char *s1, const char *s2, size_t n);
-size_t					ft_strlen(const char *s);
-
-/* ===== ft_memory.c ===== */
-void					*xmalloc(size_t size);
-void					*ft_calloc(size_t nmemb, size_t size);
-void					ft_bzero(void *s, size_t n);
-void					*ft_memcpy(void *dest, const void *src, size_t n);
-
-/* ===== ft_io.c ===== */
-void					ft_putchar_fd(char c, int fd);
-void					ft_putstr_fd(char *s, int fd);
-void					ft_putendl_fd(char *s, int fd);
-int						ft_isalnum(int c);
 
 /* ===== ft_append.c ===== */
 char					*ft_charappend(char *str, char c, size_t *len);
@@ -103,6 +90,9 @@ void					free_token_list(t_token *token);
 
 /* ===== ft_error.c ===== */
 void					exit_with_error(char *message, int exit_code);
+
+/* ===== ft_mkstemp.c ===== */
+int						ft_mkstemp(char *template);
 
 /* ===== lexer.c ===== */
 void					append_token(t_token **head, t_token *new_token);
@@ -163,5 +153,41 @@ t_redirect_type			token_type_to_redirect_type(t_token_type type);
 t_redirect				*create_redirect_node(t_token **token_ptr);
 t_redirect				*build_redirects(t_token **token_ptr);
 void					append_cmd(t_cmd **head, t_cmd *new_cmd);
+
+/* ===== executer.c ===== */
+void					setup_redirects(t_redirect *redirect);
+size_t					count_commands(t_cmd *cmd);
+void					executer(t_data *data);
+
+/* ===== executer_pipe.c ===== */
+int						**cleate_all_pipes(size_t cmd_count);
+void					close_all_pipes(int **pipes, size_t cmd_count);
+void					execute_multiple_commands(t_data *data);
+
+/* ===== executer_child.c ===== */
+char					*get_execve_path(char *name, t_data *data);
+char					*search_paths(char **paths, char *name);
+void					execute_child(t_cmd *cmd, t_data *data);
+void					connect_pipefd_stdfd(t_data *data, int **pipes,
+							size_t cmd_index);
+void					fork_children(t_cmd *cmd, int **pipes, t_data *data);
+
+/* ===== executer_heredoc.c ===== */
+void					cleanup_heredocs(t_cmd *cmd);
+int						handle_heredocs(t_cmd *cmd, t_data *data);
+
+/* ===== executer_builtin.c ===== */
+int						execute_builtin(t_cmd *cmd, t_data *data);
+int						is_builtin(char *cmd);
+void					execute_single_builtin(t_data *data);
+
+/* ===== builtin_tmp.c ===== */
+int						builtin_echo(char **argv);
+int						builtin_cd(char **argv, t_data *data);
+int						builtin_pwd(void);
+int						builtin_export(char **argv, t_data *data);
+int						builtin_unset(char **argv, t_data *data);
+int						builtin_env(t_data *data);
+int						builtin_exit(char **argv, t_data *data);
 
 #endif

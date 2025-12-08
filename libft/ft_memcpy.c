@@ -1,58 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memory.c                                        :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/01 01:44:18 by totake            #+#    #+#             */
-/*   Updated: 2025/12/01 12:08:39 by totake           ###   ########.fr       */
+/*   Created: 2024/10/31 15:34:02 by totake            #+#    #+#             */
+/*   Updated: 2024/12/13 15:08:29 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-void	*xmalloc(size_t size)
-{
-	void	*ptr;
-
-	ptr = malloc(size);
-	if (!ptr)
-	{
-		ft_putendl_fd("minishell: memory allocation failed", STDERR_FILENO);
-		exit(1);
-	}
-	return (ptr);
-}
-
-void	*ft_calloc(size_t nmemb, size_t size)
-{
-	size_t	all_size;
-	void	*ret;
-
-	if (nmemb != 0 && size != 0 && size > SIZE_MAX / nmemb)
-		return (NULL);
-	all_size = nmemb * size;
-	ret = xmalloc(all_size);
-	if (!ret)
-		return (NULL);
-	ft_bzero(ret, all_size);
-	return (ret);
-}
-
-void	ft_bzero(void *s, size_t n)
-{
-	size_t			i;
-	unsigned char	*ptr;
-
-	i = 0;
-	ptr = s;
-	while (i < n)
-	{
-		ptr[i] = 0;
-		i++;
-	}
-}
+#include "libft.h"
 
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
@@ -70,3 +28,26 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	}
 	return (dest);
 }
+
+// #include <stdio.h>
+// #include <string.h>
+
+// int	main(void)
+// {
+// 	size_t buf_size = 32;
+// 	char buf1[buf_size];
+// char buf2[buf_size];
+// char buf3[buf_size];
+// void *null_p;
+
+// null_p = NULL;
+// bzero(buf1, buf_size);
+// bzero(buf2, buf_size);
+// memset(buf3, 'a', 5);
+// fprintf(stdout, "memcpy    : %s\n", (char *)memcpy(buf1, buf3, 5));
+// fprintf(stdout, "ft_memcpy : %s\n", (char *)ft_memcpy(buf2, buf3, 5));
+// printf("%p\n", ft_memcpy(null_p, buf1, 0));
+// ft_memcpy(null_p, buf1, 5);
+
+// 	return (0);
+// }

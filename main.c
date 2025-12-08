@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:52:58 by totake            #+#    #+#             */
-/*   Updated: 2025/12/02 16:13:15 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/07 19:25:56 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	**envp_copy(char **envp)
 	i = 0;
 	while (envp[i])
 		i++;
-	new_envp = (char **)xmalloc(sizeof(char *) * (i + 1));
+	new_envp = (char **)safe_alloc(sizeof(char *) * (i + 1));
 	if (!new_envp)
 		return (NULL);
 	i = 0;
@@ -76,11 +76,13 @@ int	main(int argc, char **argv, char **envp)
 		{
 			add_history(data.line);
 			lexer(&data);
-			print_tokens(data.token); // For debugging
+			// print_tokens(data.token); // For debugging
 			parser(&data);
-			print_cmds(data.cmd); // For debugging
+			// print_cmds(data.cmd); // For debugging
+			handle_heredocs(data.cmd, &data);
+			executer(&data);
 		}
 		safe_free((void **)&data.line);
 	}
-	return (0);
+	return (data.last_status);
 }
