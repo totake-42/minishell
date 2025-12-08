@@ -6,7 +6,7 @@
 #    By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/01 02:28:33 by totake            #+#    #+#              #
-#    Updated: 2025/12/08 23:46:13 by totake           ###   ########.fr        #
+#    Updated: 2025/12/09 00:07:06 by totake           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,8 +40,19 @@ SRCS = main.c \
 	executer_redirect.c \
 	heredoc.c \
 	heredoc_utils.c \
-	builtin_tmp.c \
 	signal.c \
+	builtin/echo.c \
+	builtin/cd.c \
+	builtin/cd_utils.c \
+	builtin/pwd.c \
+	builtin/export.c \
+	builtin/export_deal.c \
+	builtin/export_sort.c \
+	builtin/unset.c \
+	builtin/env.c \
+	builtin/exit.c \
+	builtin/ft_argv_len.c \
+	builtin/option_check.c \
 	debug.c
 
 OBJS = $(SRCS:.c=.o)
@@ -55,7 +66,8 @@ $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(LDFLAGS)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -I$(LIBFT_DIR) -c $< -o $@
+	$(CC) $(CFLAGS) -I$(LIBFT_DIR) -I. -c $< -o $@
+# 	$(CC) $(CFLAGS) -I$(LIBFT_DIR) -c $< -o $@
 
 clean:
 	rm -f $(OBJS)

@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:30:31 by totake            #+#    #+#             */
-/*   Updated: 2025/12/08 23:45:54 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/09 00:19:13 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,13 +207,21 @@ void					set_child_sig(void);
 void					set_ignore_sig(void);
 void					set_heredoc_sig(void);
 
-/* ===== builtin_tmp.c ===== */
-int						builtin_echo(char **argv);
-int						builtin_cd(char **argv, t_data *data);
-int						builtin_pwd(void);
-int						builtin_export(char **argv, t_data *data);
-int						builtin_unset(char **argv, t_data *data);
-int						builtin_env(t_data *data);
-int						builtin_exit(char **argv, t_data *data);
+/* ===== builtin ===== */
+int						builtin_echo(t_cmd *cmd, t_data *data);
+int						builtin_cd(t_cmd *cmd, t_data *data);
+int						cd_error(char *path);
+void					update_env_var_cd(t_data *data, char *key, char *value);
+int						check_cd_args(t_cmd *cmd);
+int						builtin_pwd(t_cmd *cmd, t_data *data);
+int						builtin_export(t_cmd *cmd, t_data *data);
+int						builtin_unset(t_cmd *cmd, t_data *data);
+int						find_env(char *key, t_data *data);
+int						builtin_env(t_cmd *cmd, t_data *data);
+void					print_sorted_env(char **envp);
+void					env_deal(t_data *data, char *arg);
+int						builtin_exit(t_cmd *cmd, t_data *data);
+int						ft_argv_len(char **argv);
+int						print_option_err(t_cmd *cmd);
 
 #endif
