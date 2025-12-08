@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 22:30:00 by totake            #+#    #+#             */
-/*   Updated: 2025/12/05 14:50:14 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/08 21:17:50 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,25 +47,14 @@ void	close_all_pipes(int **pipes, size_t cmd_count)
 	}
 }
 
-void	wait_and_cleanup(t_cmd *cmd, int **pipes, t_data *data)
+void	free_all_pipes(int **pipes, size_t cmd_count)
 {
-	t_cmd	*current;
-	int		status;
-	int		last_status;
 	size_t	i;
 
-	close_all_pipes(pipes, data->cmd_count);
-	current = cmd;
-	last_status = 0;
-	while (current != NULL)
-	{
-		waitpid(current->pid, &status, 0);
-		last_status = status;
-		current = current->next;
-	}
-	data->last_status = WEXITSTATUS(last_status);
+	if (pipes == NULL)
+		return ;
 	i = 0;
-	while (i < data->cmd_count - 1)
+	while (i < cmd_count - 1)
 	{
 		safe_free((void **)&pipes[i]);
 		i++;
@@ -73,11 +62,43 @@ void	wait_and_cleanup(t_cmd *cmd, int **pipes, t_data *data)
 	safe_free((void **)&pipes);
 }
 
-void	execute_multiple_commands(t_data *data)
+int	status_from_signal(int status, int *sigint_flag, int *sigquit_flag)
 {
-	int	**pipes;
+	int	signal_number;
 
-	pipes = cleate_all_pipes(data->cmd_count);
-	fork_children(data->cmd, pipes, data);
-	wait_and_cleanup(data->cmd, pipes, data);
+	signal_number = WTERMSIG(status);
+	if (signal_number == SIGINT && !(*sigint_flag))
+	{
+		write(STDERR_FILENO, "\n", 1);
+		*sigint_flag = 1;
+	}
+	if (signal_number == SIGQUIT && !(*sigquit_flag))
+	{
+		ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
+		*sigquit_flag = 1;
+	}
+	return (128 + signal_number);
+}
+
+void	wait_all(t_cmd *cmd, t_data *data)
+{
+	t_cmd	*current;
+	int		status;
+	int		sigint_flag;
+	int		sigquit_flag;
+
+	current = cmd;
+	set_ignore_sig();
+	sigint_flag = 0;
+	sigquit_flag = 0;
+	while (current != NULL)
+	{
+		waitpid(current->pid, &status, 0);
+		if (WIFEXITED(status))
+			data->last_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			data->last_status = status_from_signal(status, &sigint_flag,
+					&sigquit_flag);
+		current = current->next;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:30:31 by totake            #+#    #+#             */
-/*   Updated: 2025/12/08 13:42:26 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/08 23:45:54 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,14 +156,27 @@ t_redirect				*build_redirects(t_token **token_ptr);
 void					append_cmd(t_cmd **head, t_cmd *new_cmd);
 
 /* ===== executer.c ===== */
-void					setup_redirects(t_redirect *redirect);
+void					execute_multiple_commands(t_data *data);
+void					execute_single_builtin(t_data *data);
 size_t					count_commands(t_cmd *cmd);
 void					executer(t_data *data);
+
+/* ===== executer_builtin.c ===== */
+int						execute_builtin(t_cmd *cmd, t_data *data);
+int						is_builtin(char *cmd);
+
+/* ===== executer_redirect.c ===== */
+int						open_redirect_file(t_redirect *redirect);
+int						open_redirects_file(t_redirect *redirect);
+void					setup_redirects(t_redirect *redirect);
 
 /* ===== executer_pipe.c ===== */
 int						**cleate_all_pipes(size_t cmd_count);
 void					close_all_pipes(int **pipes, size_t cmd_count);
-void					execute_multiple_commands(t_data *data);
+void					wait_all(t_cmd *cmd, t_data *data);
+void					free_all_pipes(int **pipes, size_t cmd_count);
+int						status_from_signal(int status, int *sigint_flag,
+							int *sigquit_flag);
 
 /* ===== executer_child.c ===== */
 char					*get_execve_path(char *name, t_data *data);
@@ -173,17 +186,26 @@ void					connect_pipefd_stdfd(t_data *data, int **pipes,
 							size_t cmd_index);
 void					fork_children(t_cmd *cmd, int **pipes, t_data *data);
 
-/* ===== executer_heredoc.c ===== */
+/* ===== heredoc_utils.c ===== */
 void					cleanup_heredocs(t_cmd *cmd);
 int						handle_heredocs(t_cmd *cmd, t_data *data);
+int						heredoc_handler(t_data *data);
 
-/* ===== executer_builtin.c ===== */
-int						execute_builtin(t_cmd *cmd, t_data *data);
-int						is_builtin(char *cmd);
-void					execute_single_builtin(t_data *data);
+/* ===== heredoc_utils.c ===== */
+void					write_heredoc_line(int fd, char *line,
+							int should_expand, t_data *data);
+int						read_heredoc_content(const char *delimiter, int fd,
+							int should_expand, t_data *data);
+int						fork_heredoc_child(int fd, t_redirect *redirect,
+							t_data *data);
+int						handle_heredoc(t_redirect *redirect, t_data *data);
 
-/* ===== executer_builtin.c ===== */
-int						set_signals(void);
+/* ===== signal.c ===== */
+void					check_readline_sig(t_data *data);
+void					set_readline_sig(void);
+void					set_child_sig(void);
+void					set_ignore_sig(void);
+void					set_heredoc_sig(void);
 
 /* ===== builtin_tmp.c ===== */
 int						builtin_echo(char **argv);

@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 23:10:35 by totake            #+#    #+#             */
-/*   Updated: 2025/12/04 23:10:36 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/08 21:08:12 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,4 @@ int	is_builtin(char *cmd)
 	if (ft_strncmp(cmd, "exit", ft_strlen("exit")) == 0)
 		return (1);
 	return (0);
-}
-
-void	execute_single_builtin(t_data *data)
-{
-	t_cmd	*cmd;
-
-	cmd = data->cmd;
-	setup_redirects(cmd->redirect);
-	data->last_status = execute_builtin(cmd, data);
 }

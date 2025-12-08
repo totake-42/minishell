@@ -6,7 +6,7 @@
 #    By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/01 02:28:33 by totake            #+#    #+#              #
-#    Updated: 2025/12/08 12:49:49 by totake           ###   ########.fr        #
+#    Updated: 2025/12/08 23:46:13 by totake           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,9 @@ SRCS = main.c \
 	executer_pipe.c \
 	executer_builtin.c \
 	executer_child.c \
+	executer_redirect.c \
 	heredoc.c \
+	heredoc_utils.c \
 	builtin_tmp.c \
 	signal.c \
 	debug.c

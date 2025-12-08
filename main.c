@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:52:58 by totake            #+#    #+#             */
-/*   Updated: 2025/12/08 13:34:28 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/08 18:02:34 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,14 @@ int	main(int argc, char **argv, char **envp)
 		perror("init_data failed");
 		return (1);
 	}
-	set_signals();
+	set_readline_sig();
 	while (1)
 	{
 		data.line = readline("minishell> ");
-		if (!data.line)
+		check_readline_sig(&data);
+		if (data.line == NULL)
 		{
-			printf("exit\n");
+			printf("\nexit\n");
 			break ;
 		}
 		if (data.line[0])
@@ -80,10 +81,12 @@ int	main(int argc, char **argv, char **envp)
 			// print_tokens(data.token); // For debugging
 			parser(&data);
 			// print_cmds(data.cmd); // For debugging
-			handle_heredocs(data.cmd, &data);
+			if (heredoc_handler(&data) < 0)
+				continue ;
 			executer(&data);
 		}
 		safe_free((void **)&data.line);
+		set_readline_sig();
 	}
 	return (data.last_status);
 }
