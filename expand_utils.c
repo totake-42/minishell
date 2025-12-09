@@ -56,6 +56,11 @@ char	*expand_dollar(char *str, size_t *i, t_data *data)
 		value = ft_itoa(data->last_status);
 		*i += 2;
 	}
+	else if (key[0] == '\0')
+	{
+		value = ft_strdup("$");
+		*i += 1;
+	}
 	else
 	{
 		value = get_env_value(key, data);

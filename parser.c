@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 18:16:35 by totake            #+#    #+#             */
-/*   Updated: 2025/12/05 14:45:40 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/09 13:32:47 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ t_cmd	*build_cmd_list(t_data *data)
 	return (head);
 }
 
-void	parser(t_data *data)
+t_cmd	*parser(t_data *data)
 {
 	// check_tokens(data)
-	data->cmd = build_cmd_list(data);
+	return (build_cmd_list(data));
 }

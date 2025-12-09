@@ -6,17 +6,17 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 02:04:57 by totake            #+#    #+#             */
-/*   Updated: 2025/12/01 15:56:44 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/09 15:10:20 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*handle_single_quote(char *raw_str)
+char	*handle_single_quote(char *raw_str, t_data *data)
 {
 	size_t	len;
 
-	len = count_quoted_len(raw_str, '\'');
+	len = count_quoted_len(raw_str, '\'', data);
 	if (len <= 2)
 		return (ft_strdup(""));
 	return (ft_substr(raw_str, 1, len - 2));
@@ -28,7 +28,7 @@ char	*handle_double_quote(char *raw_str, t_data *data)
 	char	*expanded;
 	size_t	len;
 
-	len = count_quoted_len(raw_str, '"');
+	len = count_quoted_len(raw_str, '"', data);
 	if (len <= 2)
 		return (ft_strdup(""));
 	content = ft_substr(raw_str, 1, len - 2);
@@ -52,12 +52,12 @@ char	*expand_next_part(char *raw_str, size_t *i, t_data *data)
 	size_t	len;
 
 	if (raw_str[*i] == '\'' || raw_str[*i] == '"')
-		len = (count_quoted_len(&raw_str[*i], raw_str[*i]));
+		len = (count_quoted_len(&raw_str[*i], raw_str[*i], data));
 	else
 		len = count_plain_len(&raw_str[*i]);
 	part = ft_substr(raw_str, *i, len);
 	if (raw_str[*i] == '\'')
-		result = handle_single_quote(part);
+		result = handle_single_quote(part, data);
 	else if (raw_str[*i] == '"')
 		result = handle_double_quote(part, data);
 	else

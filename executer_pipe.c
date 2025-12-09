@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 22:30:00 by totake            #+#    #+#             */
-/*   Updated: 2025/12/08 21:17:50 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/09 10:53:46 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void	wait_all(t_cmd *cmd, t_data *data)
 	while (current != NULL)
 	{
 		waitpid(current->pid, &status, 0);
+		// error case if (pid < 0)
 		if (WIFEXITED(status))
 			data->last_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))

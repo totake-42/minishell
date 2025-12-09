@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:52:58 by totake            #+#    #+#             */
-/*   Updated: 2025/12/08 18:02:34 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/09 16:27:36 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,40 @@ int	init_data(t_data *data, char **envp)
 	data->line = NULL;
 	data->token = NULL;
 	data->envp = envp_copy(envp);
+	if (!data->envp)
+		return (-1);
 	data->cmd = NULL;
 	data->cur_cmd = NULL;
 	data->last_status = 0;
-	if (!data->envp)
-		return (-1);
 	return (0);
+}
+
+void	prompt_loop(t_data *data)
+{
+	while (1)
+	{
+		set_readline_sig();
+		data->line = readline("minishell> ");
+		check_readline_sig(data);
+		if (data->line == NULL)
+		{
+			printf("exit\n");
+			break ;
+		}
+		if (data->line[0])
+			add_history(data->line);
+		if (lexer(data) < 0)
+			continue ;
+		// print_tokens(data.token); // For debugging
+		data->cmd = parser(data);
+		free_token_list(data->token);
+		// print_cmds(data.cmd); // For debugging
+		if (heredoc_handler(data) < 0)
+			continue ;
+		if (executer(data) < 0)
+			continue ;
+		safe_free((void **)&data->line);
+	}
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -61,32 +89,10 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	if (init_data(&data, envp))
 	{
-		perror("init_data failed");
+		perror("envp_copy failed");
 		return (1);
 	}
-	set_readline_sig();
-	while (1)
-	{
-		data.line = readline("minishell> ");
-		check_readline_sig(&data);
-		if (data.line == NULL)
-		{
-			printf("\nexit\n");
-			break ;
-		}
-		if (data.line[0])
-		{
-			add_history(data.line);
-			lexer(&data);
-			// print_tokens(data.token); // For debugging
-			parser(&data);
-			// print_cmds(data.cmd); // For debugging
-			if (heredoc_handler(&data) < 0)
-				continue ;
-			executer(&data);
-		}
-		safe_free((void **)&data.line);
-		set_readline_sig();
-	}
+	prompt_loop(&data);
+	// free_all_data(&data);
 	return (data.last_status);
 }

@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:30:31 by totake            #+#    #+#             */
-/*   Updated: 2025/12/09 00:19:13 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/09 15:13:55 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,15 @@ char					*ft_strappend(char *str, char *append_str, size_t *len);
 /* ===== ft_free.c ===== */
 void					safe_free(void **ptr);
 void					free_token_list(t_token *token);
+void					free_redirect_list(t_redirect *redirect);
+void					free_cmd_list(t_cmd *cmd);
+void					free_envp(char **envp);
+
+void					free_all_data(t_data *data);
 
 /* ===== ft_error.c ===== */
-void					exit_with_error(char *message, int exit_code);
+void					exit_with_error(char *message, int exit_code,
+							t_data *data);
 
 /* ===== ft_mkstemp.c ===== */
 int						ft_mkstemp(char *template);
@@ -100,7 +106,7 @@ void					append_token(t_token **head, t_token *new_token);
 void					skip_whitespace(char **line);
 t_token					*create_token_node(char *ptr, size_t len, t_data *data);
 t_token					*build_token_list(t_data *data);
-void					lexer(t_data *data);
+int						lexer(t_data *data);
 
 /* ===== lexer_ctype.c ===== */
 int						is_whitespace(char c);
@@ -113,12 +119,13 @@ t_token_type			detect_token_type(char *str);
 t_token_type			detect_delimiter_type(char *str);
 
 /* ===== lexer_token_len.c ===== */
-size_t					count_quoted_len(char *str, char quote_char);
+size_t					count_quoted_len(char *str, char quote_char,
+							t_data *data);
 size_t					count_plain_len(char *str);
-size_t					next_token_len(char *str);
+size_t					next_token_len(char *str, t_data *data);
 
 /* ===== expand.c ===== */
-char					*handle_single_quote(char *raw_str);
+char					*handle_single_quote(char *raw_str, t_data *data);
 char					*handle_double_quote(char *raw_str, t_data *data);
 char					*handle_plain_string(char *raw_str, t_data *data);
 char					*expand_raw_str(char *raw_str, t_data *data);
@@ -140,7 +147,7 @@ void					print_cmds(t_cmd *cmd);
 /* ===== parser.c ===== */
 t_cmd					*create_cmd_node(t_token **token_ptr);
 t_cmd					*build_cmd_list(t_data *data);
-void					parser(t_data *data);
+t_cmd					*parser(t_data *data);
 
 /* ===== parser_argv.c ===== */
 void					append_arg(char ***argv, char *arg);
@@ -159,7 +166,7 @@ void					append_cmd(t_cmd **head, t_cmd *new_cmd);
 void					execute_multiple_commands(t_data *data);
 void					execute_single_builtin(t_data *data);
 size_t					count_commands(t_cmd *cmd);
-void					executer(t_data *data);
+int						executer(t_data *data);
 
 /* ===== executer_builtin.c ===== */
 int						execute_builtin(t_cmd *cmd, t_data *data);
