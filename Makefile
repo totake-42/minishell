@@ -6,7 +6,7 @@
 #    By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/01 02:28:33 by totake            #+#    #+#              #
-#    Updated: 2025/12/09 00:07:06 by totake           ###   ########.fr        #
+#    Updated: 2025/12/09 17:24:39 by totake           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ SRCS = main.c \
 	lexer_ctype.c \
 	lexer_token_type.c \
 	lexer_token_len.c \
+	lexer_check.c \
 	expand.c \
 	expand_utils.c \
 	parser.c \

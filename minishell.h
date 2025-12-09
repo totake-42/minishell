@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:30:31 by totake            #+#    #+#             */
-/*   Updated: 2025/12/09 15:13:55 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/09 17:36:50 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,10 @@ size_t					count_quoted_len(char *str, char quote_char,
 size_t					count_plain_len(char *str);
 size_t					next_token_len(char *str, t_data *data);
 
+/* ===== lexer_check.c ===== */
+int						has_unclosed_quote(char *str);
+int						check_token(t_token *token);
+
 /* ===== expand.c ===== */
 char					*handle_single_quote(char *raw_str, t_data *data);
 char					*handle_double_quote(char *raw_str, t_data *data);
@@ -147,7 +151,7 @@ void					print_cmds(t_cmd *cmd);
 /* ===== parser.c ===== */
 t_cmd					*create_cmd_node(t_token **token_ptr);
 t_cmd					*build_cmd_list(t_data *data);
-t_cmd					*parser(t_data *data);
+int						parser(t_data *data);
 
 /* ===== parser_argv.c ===== */
 void					append_arg(char ***argv, char *arg);

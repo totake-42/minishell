@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:52:58 by totake            #+#    #+#             */
-/*   Updated: 2025/12/09 16:27:36 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/09 17:39:52 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ void	prompt_loop(t_data *data)
 		if (lexer(data) < 0)
 			continue ;
 		// print_tokens(data.token); // For debugging
-		data->cmd = parser(data);
-		free_token_list(data->token);
+		if (parser(data) < 0)
+			continue ;
 		// print_cmds(data.cmd); // For debugging
 		if (heredoc_handler(data) < 0)
 			continue ;

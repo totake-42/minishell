@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 20:26:54 by totake            #+#    #+#             */
-/*   Updated: 2025/12/09 15:49:03 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/09 17:21:06 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,32 +73,6 @@ t_token	*build_token_list(t_data *data)
 	return (head);
 }
 
-// return (1) case: unclosed quote found
-// return (0) case: all quotes are closed
-static int	has_unclosed_quote(const char *str)
-{
-	int		i;
-	char	quote;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '"' || str[i] == '\'')
-		{
-			quote = str[i];
-			i++;
-			while (str[i] && str[i] != quote)
-				i++;
-			if (str[i] == '\0')
-				return (1);
-			i++;
-		}
-		else
-			i++;
-	}
-	return (0);
-}
-
 int	lexer(t_data *data)
 {
 	if (has_unclosed_quote(data->line))
@@ -111,6 +85,14 @@ int	lexer(t_data *data)
 	data->token = build_token_list(data);
 	if (data->token == NULL)
 	{
+		safe_free((void **)&data->line);
+		return (-1);
+	}
+	if (check_token(data->token) == -1)
+	{
+		data->last_status = 2;
+		free_token_list(data->token);
+		data->token = NULL;
 		safe_free((void **)&data->line);
 		return (-1);
 	}
