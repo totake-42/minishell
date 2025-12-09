@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 02:11:55 by totake            #+#    #+#             */
-/*   Updated: 2025/12/05 13:59:19 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/09 16:45:05 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ char	*extract_var_key(char *str)
 
 	if (str[0] == '?')
 		return (ft_strdup("?"));
+	if (!ft_isalpha(str[0]) && str[0] != '_')
+		return (ft_strdup(""));
 	len = 0;
 	while (str[len] && (ft_isalnum(str[len]) || str[len] == '_'))
 		len++;
