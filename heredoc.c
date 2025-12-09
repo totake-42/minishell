@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 23:38:17 by totake            #+#    #+#             */
-/*   Updated: 2025/12/08 23:43:48 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 08:15:08 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,9 @@ int	heredoc_handler(t_data *data)
 {
 	if (handle_heredocs(data->cmd, data) < 0)
 	{
-		// free_command_list(data);
+		data->last_status = 130;
+		free_cmd_list(data->cmd);
+		data->cmd = NULL;
 		return (-1);
 	}
 	return (0);
