@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 14:12:07 by totake            #+#    #+#             */
-/*   Updated: 2025/12/08 16:12:18 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 08:30:36 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void	fork_children(t_cmd *cmd, int **pipes, t_data *data)
 	while (cmd != NULL)
 	{
 		cmd->pid = fork();
+		cmd->is_in_child = 1;
 		if (cmd->pid < 0)
 		{
 			perror("fork");

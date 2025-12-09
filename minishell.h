@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:30:31 by totake            #+#    #+#             */
-/*   Updated: 2025/12/09 17:36:50 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 08:29:27 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ typedef struct s_cmd
 	char				**argv;
 	t_redirect			*redirect;
 	pid_t				pid;
+	int					is_in_child;
 	struct s_cmd		*next;
 }						t_cmd;
 

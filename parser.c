@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 18:16:35 by totake            #+#    #+#             */
-/*   Updated: 2025/12/09 17:39:14 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 08:31:12 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ t_cmd	*create_cmd_node(t_token **token_ptr)
 	cmd = (t_cmd *)ft_calloc(1, sizeof(t_cmd));
 	cmd->argv = build_argv(token_ptr);
 	cmd->redirect = build_redirects(token_ptr);
+	cmd->pid = -1;
+	cmd->is_in_child = 0;
 	cmd->next = NULL;
 	return (cmd);
 }
