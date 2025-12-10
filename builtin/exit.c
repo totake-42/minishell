@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yebi <yebi@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 09:57:11 by ebichan           #+#    #+#             */
-/*   Updated: 2025/12/08 12:00:10 by yebi             ###   ########.fr       */
+/*   Updated: 2025/12/10 08:55:43 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,10 @@ int	builtin_exit(t_cmd *cmd, t_data *data)
 {
 	long	exit_status;
 
-	ft_putendl_fd("exit", STDERR_FILENO);
+	if (isatty(STDIN_FILENO))
+		if (!cmd->is_in_child)
+			ft_putendl_fd("exit", STDERR_FILENO);
+	// ft_putendl_fd("exit", STDERR_FILENO);
 	if (ft_argv_len(cmd->argv) >= 2)
 	{
 		if (is_numeric(cmd->argv[1]) == 0)
