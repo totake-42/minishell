@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 14:12:07 by totake            #+#    #+#             */
-/*   Updated: 2025/12/10 08:30:36 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 16:48:19 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	fork_children(t_cmd *cmd, int **pipes, t_data *data)
 			set_child_sig();
 			connect_pipefd_stdfd(data, pipes, i);
 			close_all_pipes(pipes, data->cmd_count);
-			setup_redirects(cmd->redirect);
+			apply_all_redirects(cmd->redirect);
 			execute_child(cmd, data);
 		}
 		cmd = cmd->next;

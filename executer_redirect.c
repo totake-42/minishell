@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 20:09:57 by totake            #+#    #+#             */
-/*   Updated: 2025/12/10 16:16:04 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 16:46:17 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int	save_stdio_ofd(int *stdin_ofd, int *stdout_ofd)
 	*stdout_ofd = dup(STDOUT_FILENO);
 	if (*stdin_ofd == -1 || *stdout_ofd == -1)
 	{
-		perror("dup");
 		if (*stdin_ofd != -1)
 			close(*stdin_ofd);
 		if (*stdout_ofd != -1)
@@ -50,8 +49,16 @@ int	save_stdio_ofd(int *stdin_ofd, int *stdout_ofd)
 
 void	restore_stdio(int stdin_ofd, int stdout_ofd)
 {
-	dup2(stdin_ofd, STDIN_FILENO);
-	dup2(stdout_ofd, STDOUT_FILENO);
+	if (dup2(stdin_ofd, STDIN_FILENO) < 0)
+	{
+		perror("fatal: dup2 restore stdin");
+		exit(1);
+	}
+	if (dup2(stdout_ofd, STDOUT_FILENO) < 0)
+	{
+		perror("fatal: dup2 restore stdout");
+		exit(1);
+	}
 	close(stdin_ofd);
 	close(stdout_ofd);
 }
@@ -85,25 +92,5 @@ int	apply_all_redirects(t_redirect *redirect)
 			return (-1);
 		redirect = redirect->next;
 	}
-	return (0);
-}
-
-int	setup_redirects(t_redirect *redirect)
-{
-	int	stdin_ofd;
-	int	stdout_ofd;
-
-	if (save_stdio_ofd(&stdin_ofd, &stdout_ofd) == -1)
-	{
-		return (-1);
-	}
-	if (apply_all_redirects(redirect) == -1)
-	{
-		perror("redirect");
-		restore_stdio(stdin_ofd, stdout_ofd);
-		return (-1);
-	}
-	close(stdin_ofd);
-	close(stdout_ofd);
 	return (0);
 }

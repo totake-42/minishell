@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:30:31 by totake            #+#    #+#             */
-/*   Updated: 2025/12/10 15:24:08 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 16:40:35 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,6 @@ int						save_stdio_ofd(int *stdin_ofd, int *stdout_ofd);
 void					restore_stdio(int stdin_ofd, int stdout_ofd);
 int						apply_single_redirect(t_redirect *r);
 int						apply_all_redirects(t_redirect *redirect);
-int						setup_redirects(t_redirect *redirect);
 
 /* ===== executer_pipe.c ===== */
 int						**cleate_all_pipes(size_t cmd_count);

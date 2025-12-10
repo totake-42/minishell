@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 20:09:57 by totake            #+#    #+#             */
-/*   Updated: 2025/12/10 13:52:33 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 16:47:50 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,25 @@ int	execute_multiple_commands(t_data *data)
 int	execute_single_builtin(t_data *data)
 {
 	t_cmd	*cmd;
+	int		stdin_ofd;
+	int		stdout_ofd;
 
 	cmd = data->cmd;
-	if (setup_redirects(cmd->redirect))
+	if (save_stdio_ofd(&stdin_ofd, &stdout_ofd) < 0)
 	{
+		perror("dup");
 		data->last_status = 1;
 		return (-1);
-	};
+	}
+	if (apply_all_redirects(cmd->redirect) < 0)
+	{
+		perror("redirect");
+		data->last_status = 1;
+		restore_stdio(stdin_ofd, stdout_ofd);
+		return (-1);
+	}
 	data->last_status = execute_builtin(cmd, data);
+	restore_stdio(stdin_ofd, stdout_ofd);
 	return (0);
 }
 
