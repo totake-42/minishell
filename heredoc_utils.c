@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 23:37:36 by totake            #+#    #+#             */
-/*   Updated: 2025/12/10 11:08:52 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 12:51:15 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,7 @@ int	read_heredoc_content(const char *delimiter, int fd, int should_expand,
 		t_data *data)
 {
 	char	*line;
-	int		delimiter_len;
 
-	delimiter_len = ft_strlen(delimiter);
 	while (1)
 	{
 		line = readline("> ");
@@ -59,8 +57,7 @@ int	read_heredoc_content(const char *delimiter, int fd, int should_expand,
 			write(STDOUT_FILENO, "\n", 1);
 			break ;
 		}
-		if (ft_strncmp(line, delimiter, delimiter_len) == 0
-			&& line[delimiter_len] == '\0')
+		if (ft_strcmp(line, delimiter) == 0)
 		{
 			safe_free((void **)&line);
 			break ;
