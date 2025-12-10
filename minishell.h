@@ -180,7 +180,10 @@ int						is_builtin(char *cmd);
 
 /* ===== executer_redirect.c ===== */
 int						open_redirect_file(t_redirect *redirect);
-int						open_redirects_file(t_redirect *redirect);
+int						save_stdio_ofd(int *stdin_ofd, int *stdout_ofd);
+void					restore_stdio(int stdin_ofd, int stdout_ofd);
+int						apply_single_redirect(t_redirect *r);
+int						apply_all_redirects(t_redirect *redirect);
 int						setup_redirects(t_redirect *redirect);
 
 /* ===== executer_pipe.c ===== */

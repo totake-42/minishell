@@ -1,0 +1,3 @@
+hello
+minishell> dkdsfjdfkreceived SIGINT
+exit
