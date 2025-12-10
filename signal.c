@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 12:49:55 by totake            #+#    #+#             */
-/*   Updated: 2025/12/10 10:57:28 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 17:25:57 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ void	set_readline_sig(void)
 	act1.sa_flags = SA_RESTART;
 	sigemptyset(&act1.sa_mask);
 	if (sigaction(SIGINT, &act1, NULL) < 0)
-		perror("minishell: sigaction");
+		perror("fatal: sigaction");
 	act2.sa_handler = SIG_IGN;
 	act2.sa_flags = 0;
 	sigemptyset(&act2.sa_mask);
 	if (sigaction(SIGQUIT, &act2, NULL) < 0)
-		perror("minishell: sigaction");
+		perror("fatal: sigaction");
 }
 
 void	set_ignore_sig(void)
@@ -70,9 +70,9 @@ void	set_ignore_sig(void)
 	sigemptyset(&act.sa_mask);
 	act.sa_flags = 0;
 	if (sigaction(SIGINT, &act, NULL) < 0)
-		perror("minishell: sigaction");
+		perror("fatal: sigaction");
 	if (sigaction(SIGQUIT, &act, NULL) < 0)
-		perror("minishell: sigaction");
+		perror("fatal: sigaction");
 }
 
 void	set_child_sig(void)
@@ -84,9 +84,9 @@ void	set_child_sig(void)
 	sigemptyset(&act.sa_mask);
 	act.sa_flags = 0;
 	if (sigaction(SIGINT, &act, NULL) < 0)
-		perror("minishell: sigaction");
+		perror("fatal: sigaction");
 	if (sigaction(SIGQUIT, &act, NULL) < 0)
-		perror("minishell: sigaction");
+		perror("fatal: sigaction");
 }
 
 void	set_heredoc_sig(void)
@@ -100,10 +100,10 @@ void	set_heredoc_sig(void)
 	act1.sa_flags = 0;
 	sigemptyset(&act1.sa_mask);
 	if (sigaction(SIGINT, &act1, NULL) < 0)
-		perror("minishell: sigaction");
+		perror("fatal: sigaction");
 	act2.sa_handler = SIG_IGN;
 	act2.sa_flags = 0;
 	sigemptyset(&act2.sa_mask);
 	if (sigaction(SIGQUIT, &act2, NULL) < 0)
-		perror("minishell: sigaction");
+		perror("fatal: sigaction");
 }

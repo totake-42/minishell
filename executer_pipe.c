@@ -6,26 +6,31 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 22:30:00 by totake            #+#    #+#             */
-/*   Updated: 2025/12/09 10:53:46 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 18:01:28 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// return (NULL) if ft_calloc overflow
 int	**cleate_all_pipes(size_t cmd_count)
 {
 	int		**pipes;
 	size_t	i;
 
+	if (cmd_count < 2)
+		return (NULL);
 	pipes = (int **)ft_calloc(cmd_count - 1, sizeof(int *));
+	if (pipes == NULL)
+		return (NULL);
 	i = 0;
 	while (i < cmd_count - 1)
 	{
 		pipes[i] = (int *)ft_calloc(2, sizeof(int));
 		if (pipe(pipes[i]) == -1)
 		{
-			perror("pipe");
-			exit(1);
+			free_all_pipes(pipes, i + 1);
+			return (NULL);
 		}
 		i++;
 	}
@@ -95,11 +100,11 @@ void	wait_all(t_cmd *cmd, t_data *data)
 	{
 		waitpid(current->pid, &status, 0);
 		// error case if (pid < 0)
-		if (WIFEXITED(status))
-			data->last_status = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-			data->last_status = status_from_signal(status, &sigint_flag,
-					&sigquit_flag);
 		current = current->next;
 	}
+	if (WIFEXITED(status))
+		data->last_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		data->last_status = status_from_signal(status, &sigint_flag,
+				&sigquit_flag);
 }

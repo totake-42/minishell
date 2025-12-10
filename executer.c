@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 20:09:57 by totake            #+#    #+#             */
-/*   Updated: 2025/12/10 16:47:50 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 17:21:29 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,19 @@ int	execute_multiple_commands(t_data *data)
 	int	**pipes;
 
 	pipes = cleate_all_pipes(data->cmd_count);
-	fork_children(data->cmd, pipes, data);
+	if (pipes == NULL && data->cmd_count > 1)
+	{
+		perror("pipe");
+		data->last_status = 1;
+		return (-1);
+	}
+	if (fork_children(data->cmd, pipes, data))
+	{
+		perror("fork");
+		free_all_pipes(pipes, data->cmd_count);
+		data->last_status = 1;
+		return (-1);
+	}
 	close_all_pipes(pipes, data->cmd_count);
 	wait_all(data->cmd, data);
 	free_all_pipes(pipes, data->cmd_count);

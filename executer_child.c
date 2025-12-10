@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 14:12:07 by totake            #+#    #+#             */
-/*   Updated: 2025/12/10 16:48:19 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 18:02:11 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	connect_pipefd_stdfd(t_data *data, int **pipes, size_t cmd_index)
 	}
 }
 
-void	fork_children(t_cmd *cmd, int **pipes, t_data *data)
+int	fork_children(t_cmd *cmd, int **pipes, t_data *data)
 {
 	size_t	i;
 
@@ -94,12 +94,9 @@ void	fork_children(t_cmd *cmd, int **pipes, t_data *data)
 	while (cmd != NULL)
 	{
 		cmd->pid = fork();
-		cmd->is_in_child = 1;
 		if (cmd->pid < 0)
-		{
-			perror("fork");
-			exit(1);
-		}
+			return (-1);
+		cmd->is_in_child = 1;
 		if (cmd->pid == 0)
 		{
 			set_child_sig();
@@ -111,4 +108,5 @@ void	fork_children(t_cmd *cmd, int **pipes, t_data *data)
 		cmd = cmd->next;
 		i++;
 	}
+	return (0);
 }
