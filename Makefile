@@ -6,7 +6,7 @@
 #    By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/01 02:28:33 by totake            #+#    #+#              #
-#    Updated: 2025/12/09 17:24:39 by totake           ###   ########.fr        #
+#    Updated: 2025/12/10 15:07:35 by totake           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,6 +44,7 @@ SRCS = main.c \
 	signal.c \
 	builtin/echo.c \
 	builtin/cd.c \
+	builtin/cd_logic.c \
 	builtin/cd_utils.c \
 	builtin/pwd.c \
 	builtin/export.c \

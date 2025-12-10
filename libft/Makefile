@@ -37,11 +37,8 @@ ft_putstr_fd.c \
 ft_putendl_fd.c \
 ft_putnbr_fd.c \
 ft_strcmp.c \
-safe_alloc.c
-
-OBJS = $(SRCS:.c=.o)
-
-BONUS_SRCS = ft_lstnew.c \
+safe_alloc.c \
+ft_lstnew.c \
 ft_lstadd_front.c \
 ft_lstsize.c \
 ft_lstlast.c \
@@ -51,18 +48,9 @@ ft_lstclear.c \
 ft_lstiter.c \
 ft_lstmap.c
 
-BONUS_OBJS = $(BONUS_SRCS:.c=.o)
-
-.DEFAULT_GOAL := all
-
-ifeq ($(filter bonus,$(MAKECMDGOALS)),bonus)
-	SRCS += $(BONUS_SRCS)
-	OBJS += $(BONUS_OBJS)
-endif
+OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
-
-bonus: $(NAME)
 
 $(NAME): $(OBJS)
 		ar rcs $(NAME) $(OBJS)
@@ -75,11 +63,4 @@ fclean: clean
 
 re: fclean all
 
-# bonus: $(NAME) $(BONUS_OBJS)
-# 	ar rcs $(NAME) $(BONUS_OBJS)
-
-# so:
-# 	$(CC) -nostartfiles -fPIC $(CFLAGS) $(SRC)
-# 	gcc -nostartfiles -shared -o libft.so $(OBJ)
-
-.PHONY: all clean fclean re bonus
+.PHONY: all clean fclean re

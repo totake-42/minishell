@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 20:09:57 by totake            #+#    #+#             */
-/*   Updated: 2025/12/08 21:20:29 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 14:14:53 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,19 @@ int	open_redirects_file(t_redirect *redirect)
 		if (redirect->type == R_INPUT)
 		{
 			if (dup2(fd, STDIN_FILENO) < 0)
+			{
+				close(fd);
 				return (-1);
+			}
 			close(fd);
 		}
 		else if (redirect->type == R_OUTPUT || redirect->type == R_APPEND)
 		{
 			if (dup2(fd, STDOUT_FILENO) < 0)
+			{
+				close(fd);
 				return (-1);
+			}
 			close(fd);
 		}
 		redirect = redirect->next;
@@ -58,11 +64,32 @@ int	open_redirects_file(t_redirect *redirect)
 	return (0);
 }
 
-void	setup_redirects(t_redirect *redirect)
+int	setup_redirects(t_redirect *redirect)
 {
+	int	old_stdin;
+	int	old_stdout;
+
+	old_stdin = dup(0);
+	old_stdout = dup(1);
+	if (old_stdin == -1 || old_stdout == -1)
+	{
+		perror("dup");
+		if (old_stdin != -1)
+			close(old_stdin);
+		if (old_stdout != -1)
+			close(old_stdout);
+		return (-1);
+	}
 	if (open_redirects_file(redirect) == -1)
 	{
 		perror("redirect");
-		exit(1);
+		dup2(old_stdin, 0);
+		dup2(old_stdout, 1);
+		close(old_stdin);
+		close(old_stdout);
+		return (-1);
 	}
+	close(old_stdin);
+	close(old_stdout);
+	return (0);
 }

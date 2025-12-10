@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:30:31 by totake            #+#    #+#             */
-/*   Updated: 2025/12/10 11:08:28 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 15:24:08 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <stddef.h>   //size_t
 # include <stdio.h>    //perror()
 # include <stdlib.h>   //malloc(), free()
+# include <sys/stat.h> //open() flags
 # include <sys/wait.h> //waitpid()
 # include <unistd.h>   //fork(), execve(), pid_t
 
@@ -168,8 +169,8 @@ t_redirect				*build_redirects(t_token **token_ptr);
 void					append_cmd(t_cmd **head, t_cmd *new_cmd);
 
 /* ===== executer.c ===== */
-void					execute_multiple_commands(t_data *data);
-void					execute_single_builtin(t_data *data);
+int						execute_multiple_commands(t_data *data);
+int						execute_single_builtin(t_data *data);
 size_t					count_commands(t_cmd *cmd);
 int						executer(t_data *data);
 
@@ -180,7 +181,7 @@ int						is_builtin(char *cmd);
 /* ===== executer_redirect.c ===== */
 int						open_redirect_file(t_redirect *redirect);
 int						open_redirects_file(t_redirect *redirect);
-void					setup_redirects(t_redirect *redirect);
+int						setup_redirects(t_redirect *redirect);
 
 /* ===== executer_pipe.c ===== */
 int						**cleate_all_pipes(size_t cmd_count);
@@ -226,6 +227,9 @@ int						builtin_cd(t_cmd *cmd, t_data *data);
 int						cd_error(char *path);
 void					update_env_var_cd(t_data *data, char *key, char *value);
 int						check_cd_args(t_cmd *cmd);
+void					free_split(char **result);
+char					*solve_logic_path(char *base, char *dst);
+void					ft_lst_del_last(t_list **lst, void (*del)(void *));
 int						builtin_pwd(t_cmd *cmd, t_data *data);
 int						builtin_export(t_cmd *cmd, t_data *data);
 int						builtin_unset(t_cmd *cmd, t_data *data);

@@ -6,13 +6,13 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 20:09:57 by totake            #+#    #+#             */
-/*   Updated: 2025/12/10 09:41:37 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 13:52:33 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	execute_multiple_commands(t_data *data)
+int	execute_multiple_commands(t_data *data)
 {
 	int	**pipes;
 
@@ -21,15 +21,21 @@ void	execute_multiple_commands(t_data *data)
 	close_all_pipes(pipes, data->cmd_count);
 	wait_all(data->cmd, data);
 	free_all_pipes(pipes, data->cmd_count);
+	return (0);
 }
 
-void	execute_single_builtin(t_data *data)
+int	execute_single_builtin(t_data *data)
 {
 	t_cmd	*cmd;
 
 	cmd = data->cmd;
-	setup_redirects(cmd->redirect);
+	if (setup_redirects(cmd->redirect))
+	{
+		data->last_status = 1;
+		return (-1);
+	};
 	data->last_status = execute_builtin(cmd, data);
+	return (0);
 }
 
 size_t	count_commands(t_cmd *cmd)
@@ -49,9 +55,22 @@ int	executer(t_data *data)
 {
 	data->cmd_count = count_commands(data->cmd);
 	if (data->cmd_count == 1 && is_builtin(data->cmd->argv[0]))
-		execute_single_builtin(data);
-	else
-		execute_multiple_commands(data);
+	{
+		if (execute_single_builtin(data) < 0)
+		{
+			safe_free((void **)&data->line);
+			free_cmd_list(data->cmd);
+			unlink_heredoc_files(data->cmd);
+			return (-1);
+		}
+	}
+	else if (execute_multiple_commands(data) < 0)
+	{
+		safe_free((void **)&data->line);
+		free_cmd_list(data->cmd);
+		unlink_heredoc_files(data->cmd);
+		return (-1);
+	}
 	unlink_heredoc_files(data->cmd);
 	return (0);
 }
