@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:52:58 by totake            #+#    #+#             */
-/*   Updated: 2025/12/09 17:39:52 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 16:51:31 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	prompt_loop(t_data *data)
 	while (1)
 	{
 		set_readline_sig();
-		data->line = readline("minishell> ");
+		data->line = readline("minishell$ ");
 		check_readline_sig(data);
 		if (data->line == NULL)
 		{
