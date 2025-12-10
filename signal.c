@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 12:49:55 by totake            #+#    #+#             */
-/*   Updated: 2025/12/08 18:14:22 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 10:57:28 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	check_readline_sig(t_data *data)
 {
 	if (g_flag == SIGINT)
 	{
-		data->last_status = 130;
+		data->last_status = 128 + SIGINT;
 		g_flag = 0;
 		printf("received SIGINT\n");
 		// write(STDOUT_FILENO, "\n", 1);
@@ -89,16 +89,6 @@ void	set_child_sig(void)
 		perror("minishell: sigaction");
 }
 
-void	h_handler(int sig)
-{
-	if (sig == SIGINT)
-	{
-		g_flag = SIGINT;
-		write(STDOUT_FILENO, "\n", 1);
-		exit(130);
-	}
-}
-
 void	set_heredoc_sig(void)
 {
 	struct sigaction	act1;
@@ -106,7 +96,7 @@ void	set_heredoc_sig(void)
 
 	ft_bzero(&act1, sizeof(struct sigaction));
 	ft_bzero(&act2, sizeof(struct sigaction));
-	act1.sa_handler = h_handler;
+	act1.sa_handler = SIG_DFL;
 	act1.sa_flags = 0;
 	sigemptyset(&act1.sa_mask);
 	if (sigaction(SIGINT, &act1, NULL) < 0)

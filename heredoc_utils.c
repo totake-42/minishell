@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 23:37:36 by totake            #+#    #+#             */
-/*   Updated: 2025/12/08 23:45:35 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 11:08:52 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,15 +72,39 @@ int	read_heredoc_content(const char *delimiter, int fd, int should_expand,
 	exit(0);
 }
 
+// Example return -1 case:
+// fork error
+// Ctrl+C during heredoc input
+
+int	wait_heredoc_child(pid_t pid, t_data *data)
+{
+	int	status;
+
+	set_ignore_sig();
+	waitpid(pid, &status, 0);
+	set_readline_sig();
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+	{
+		write(STDOUT_FILENO, "\n", 1);
+		data->last_status = 128 + SIGINT;
+		return (-1);
+	}
+	else if (WIFEXITED(status))
+	{
+		data->last_status = WEXITSTATUS(status);
+	}
+	return (0);
+}
+
 int	fork_heredoc_child(int fd, t_redirect *redirect, t_data *data)
 {
 	pid_t	pid;
-	int		status;
 
 	pid = fork();
 	if (pid < 0)
 	{
 		perror("fork");
+		data->last_status = 1;
 		return (-1);
 	}
 	if (pid == 0)
@@ -89,32 +113,5 @@ int	fork_heredoc_child(int fd, t_redirect *redirect, t_data *data)
 		read_heredoc_content(redirect->filename, fd, redirect->should_expand,
 			data);
 	}
-	set_ignore_sig();
-	waitpid(pid, &status, 0);
-	set_readline_sig();
-	data->last_status = WEXITSTATUS(status);
-	if (WIFEXITED(status) && data->last_status == 130)
-		return (-1);
-	return (0);
-}
-
-int	handle_heredoc(t_redirect *redirect, t_data *data)
-{
-	int		fd;
-	char	template_str[] = "/tmp/minishell_heredocXXXXXX";
-
-	fd = create_heredoc_file(template_str);
-	if (fd == -1)
-		return (-1);
-	if (fork_heredoc_child(fd, redirect, data) == -1)
-	{
-		close(fd);
-		unlink(template_str);
-		return (-1);
-	}
-	close(fd);
-	safe_free((void **)&redirect->filename);
-	redirect->filename = ft_strdup(template_str);
-	redirect->type = R_INPUT;
-	return (0);
+	return (wait_heredoc_child(pid, data));
 }

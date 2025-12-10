@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:30:31 by totake            #+#    #+#             */
-/*   Updated: 2025/12/10 08:29:27 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 11:08:28 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,18 +199,19 @@ void					connect_pipefd_stdfd(t_data *data, int **pipes,
 void					fork_children(t_cmd *cmd, int **pipes, t_data *data);
 
 /* ===== heredoc_utils.c ===== */
-void					cleanup_heredocs(t_cmd *cmd);
+void					unlink_heredoc_files(t_cmd *cmd);
+int						handle_heredoc(t_redirect *redirect, t_data *data);
 int						handle_heredocs(t_cmd *cmd, t_data *data);
 int						heredoc_handler(t_data *data);
 
 /* ===== heredoc_utils.c ===== */
+int						create_heredoc_file(char *template);
 void					write_heredoc_line(int fd, char *line,
 							int should_expand, t_data *data);
 int						read_heredoc_content(const char *delimiter, int fd,
 							int should_expand, t_data *data);
 int						fork_heredoc_child(int fd, t_redirect *redirect,
 							t_data *data);
-int						handle_heredoc(t_redirect *redirect, t_data *data);
 
 /* ===== signal.c ===== */
 void					check_readline_sig(t_data *data);

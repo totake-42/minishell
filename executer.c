@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 20:09:57 by totake            #+#    #+#             */
-/*   Updated: 2025/12/09 15:10:42 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 09:41:37 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,6 @@ int	executer(t_data *data)
 		execute_single_builtin(data);
 	else
 		execute_multiple_commands(data);
-	cleanup_heredocs(data->cmd);
+	unlink_heredoc_files(data->cmd);
 	return (0);
 }
