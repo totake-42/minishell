@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 22:30:00 by totake            #+#    #+#             */
-/*   Updated: 2025/12/10 21:15:13 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/11 00:08:44 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,22 +67,13 @@ void	free_all_pipes(int **pipes, size_t cmd_count)
 	safe_free((void **)&pipes);
 }
 
-int	status_from_signal(int status, int *sigint_flag, int *sigquit_flag)
+int	status_from_signal(int status, int *sigint_flag)
 {
-	// int	signal_number;
-	// signal_number = WTERMSIG(status);
 	if (WTERMSIG(status) == SIGINT && !(*sigint_flag))
 	{
-		// printf("received SIGINT yes\n");
 		write(STDERR_FILENO, "\n", 1);
 		*sigint_flag = 1;
 	}
-	// if (signal_number == SIGQUIT && !(*sigquit_flag))
-	// {
-	// 	ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
-	// 	*sigquit_flag = 1;
-	// }
-	*sigquit_flag = WTERMSIG(status);
 	return (128 + WTERMSIG(status));
 }
 
@@ -91,12 +82,10 @@ void	wait_all(t_cmd *cmd, t_data *data)
 	t_cmd	*current;
 	int		status;
 	int		sigint_flag;
-	int		sigquit_flag;
 
 	current = cmd;
 	set_ignore_sig();
 	sigint_flag = 0;
-	sigquit_flag = 0;
 	while (current != NULL)
 	{
 		waitpid(current->pid, &status, 0);
@@ -104,10 +93,9 @@ void	wait_all(t_cmd *cmd, t_data *data)
 		if (WIFEXITED(status))
 			data->last_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
-			data->last_status = status_from_signal(status, &sigint_flag,
-					&sigquit_flag);
+			data->last_status = status_from_signal(status, &sigint_flag);
+		if (current->next == NULL && WTERMSIG(status) == SIGQUIT)
+			ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
 		current = current->next;
 	}
-	if (sigquit_flag == SIGQUIT)
-		ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
 }

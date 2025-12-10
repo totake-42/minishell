@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:30:31 by totake            #+#    #+#             */
-/*   Updated: 2025/12/10 17:19:40 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/11 00:08:25 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,8 +190,7 @@ int						**cleate_all_pipes(size_t cmd_count);
 void					close_all_pipes(int **pipes, size_t cmd_count);
 void					wait_all(t_cmd *cmd, t_data *data);
 void					free_all_pipes(int **pipes, size_t cmd_count);
-int						status_from_signal(int status, int *sigint_flag,
-							int *sigquit_flag);
+int						status_from_signal(int status, int *sigint_flag);
 
 /* ===== executer_child.c ===== */
 char					*get_execve_path(char *name, t_data *data);
