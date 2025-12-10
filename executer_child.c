@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 14:12:07 by totake            #+#    #+#             */
-/*   Updated: 2025/12/10 18:02:11 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/11 00:43:13 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,17 @@ void	execute_child(t_cmd *cmd, t_data *data)
 {
 	char	*path;
 
+	if (!cmd->argv || !cmd->argv[0])
+		exit(data->last_status);
 	if (is_builtin(cmd->argv[0]))
 		exit(execute_builtin(cmd, data));
 	path = get_execve_path(cmd->argv[0], data);
 	if (path == NULL)
 	{
-		ft_putendl_fd("minishell: command not found", 2);
+		write(2, "minishell: ", 12);
+		write(2, cmd->argv[0], ft_strlen(cmd->argv[0]));
+		write(2, ": command not found\n", 20);
+		// ft_putendl_fd("minishell: command not found", 2);
 		if (errno == ENOENT)
 			exit(127);
 		else
@@ -66,7 +71,7 @@ void	execute_child(t_cmd *cmd, t_data *data)
 	exit(126);
 }
 
-void	connect_pipefd_stdfd(t_data *data, int **pipes, size_t cmd_index)
+void	child_connect_pipefd_stdfd(t_data *data, int **pipes, size_t cmd_index)
 {
 	if (cmd_index > 0)
 	{
@@ -100,9 +105,13 @@ int	fork_children(t_cmd *cmd, int **pipes, t_data *data)
 		if (cmd->pid == 0)
 		{
 			set_child_sig();
-			connect_pipefd_stdfd(data, pipes, i);
+			child_connect_pipefd_stdfd(data, pipes, i);
 			close_all_pipes(pipes, data->cmd_count);
-			apply_all_redirects(cmd->redirect);
+			if (apply_all_redirects(cmd->redirect) < 0)
+			{
+				perror("redirect");
+				exit(1);
+			}
 			execute_child(cmd, data);
 		}
 		cmd = cmd->next;

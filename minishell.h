@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:30:31 by totake            #+#    #+#             */
-/*   Updated: 2025/12/11 00:08:25 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/11 00:27:25 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,7 @@ int						status_from_signal(int status, int *sigint_flag);
 char					*get_execve_path(char *name, t_data *data);
 char					*search_paths(char **paths, char *name);
 void					execute_child(t_cmd *cmd, t_data *data);
-void					connect_pipefd_stdfd(t_data *data, int **pipes,
+void					child_connect_pipefd_stdfd(t_data *data, int **pipes,
 							size_t cmd_index);
 int						fork_children(t_cmd *cmd, int **pipes, t_data *data);
 
