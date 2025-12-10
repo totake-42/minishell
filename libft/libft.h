@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 16:35:54 by totake            #+#    #+#             */
-/*   Updated: 2025/12/07 16:08:35 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/10 12:29:03 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void				ft_putendl_fd(char *s, int fd);
 void				ft_putnbr_fd(int n, int fd);
 
 // minishell functions
+int					ft_strcmp(const char *s1, const char *s2);
 void				*safe_alloc(size_t size);
 
 // bonus
