@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 12:49:55 by totake            #+#    #+#             */
-/*   Updated: 2025/12/10 17:25:57 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/14 19:49:40 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,9 @@ void	check_readline_sig(t_data *data)
 	{
 		data->last_status = 128 + SIGINT;
 		g_flag = 0;
-		printf("received SIGINT\n");
-		// write(STDOUT_FILENO, "\n", 1);
-		// rl_on_new_line();
-		// rl_replace_line("", 0);
+		rl_replace_line("", 0);
+		write(STDOUT_FILENO, "\n", 1);
+		rl_on_new_line();
 		rl_redisplay();
 	}
 }

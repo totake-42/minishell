@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:52:58 by totake            #+#    #+#             */
-/*   Updated: 2025/12/10 16:51:31 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/14 19:47:10 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	if (init_data(&data, envp))
-	{
-		perror("envp_copy failed");
-		return (1);
-	}
+	init_data(&data, envp);
 	prompt_loop(&data);
 	// free_all_data(&data);
 	return (data.last_status);
