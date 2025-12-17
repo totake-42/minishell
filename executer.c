@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 20:09:57 by totake            #+#    #+#             */
-/*   Updated: 2025/12/10 17:21:29 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/17 14:20:10 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	execute_multiple_commands(t_data *data)
 {
 	int	**pipes;
 
+	data->last_status = 0;
 	pipes = cleate_all_pipes(data->cmd_count);
 	if (pipes == NULL && data->cmd_count > 1)
 	{
@@ -77,7 +78,8 @@ size_t	count_commands(t_cmd *cmd)
 int	executer(t_data *data)
 {
 	data->cmd_count = count_commands(data->cmd);
-	if (data->cmd_count == 1 && is_builtin(data->cmd->argv[0]))
+	if (data->cmd_count == 1 && data->cmd->argv != NULL
+		&& is_builtin(data->cmd->argv[0]))
 	{
 		if (execute_single_builtin(data) < 0)
 		{
