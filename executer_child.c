@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 14:12:07 by totake            #+#    #+#             */
-/*   Updated: 2025/12/17 19:44:00 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/17 20:40:37 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,16 @@ char	*get_execve_path(char *name, t_data *data)
 {
 	char	*path;
 	char	**paths;
+	char	tmp[2];
 
 	if (ft_strchr(name, '/'))
 		return (ft_strdup(name));
 	path = get_env_value("PATH", data);
 	if (path == NULL)
-		path = ft_strdup("./");
+	{
+		ft_strlcpy(tmp, ".", 2);
+		path = tmp;
+	}
 	paths = ft_split(path, ':');
 	return (search_paths(paths, name));
 }
@@ -36,6 +40,7 @@ char	*search_paths(char **paths, char *name)
 	while (paths[i] != NULL)
 	{
 		tmp = ft_strjoin(paths[i], "/");
+		printf("tmp: %s\n", tmp);
 		full_path = ft_strjoin(tmp, name);
 		safe_free((void **)&tmp);
 		if (access(full_path, X_OK) == 0)

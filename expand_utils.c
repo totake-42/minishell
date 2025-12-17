@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 02:11:55 by totake            #+#    #+#             */
-/*   Updated: 2025/12/09 16:45:05 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/17 20:19:24 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*get_env_value(char *key, t_data *data)
 			return (ft_strdup(&data->envp[i][key_len + 1]));
 		i++;
 	}
-	return (ft_strdup(""));
+	return (NULL);
 }
 
 char	*extract_var_key(char *str)
