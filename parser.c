@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 18:16:35 by totake            #+#    #+#             */
-/*   Updated: 2025/12/10 08:31:12 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/17 15:35:49 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,30 @@ void	append_cmd(t_cmd **head, t_cmd *new_cmd)
 
 t_cmd	*create_cmd_node(t_token **token_ptr)
 {
-	t_cmd	*cmd;
+	t_cmd		*cmd;
+	t_redirect	*r;
 
 	cmd = (t_cmd *)ft_calloc(1, sizeof(t_cmd));
-	cmd->argv = build_argv(token_ptr);
-	cmd->redirect = build_redirects(token_ptr);
 	cmd->pid = -1;
 	cmd->is_in_child = 0;
 	cmd->next = NULL;
+	while (*token_ptr != NULL && (*token_ptr)->type != T_PIPE)
+	{
+		if (is_redirect((*token_ptr)->type))
+		{
+			r = create_redirect_node(token_ptr);
+			append_redirect(&cmd->redirect, r);
+		}
+		else if ((*token_ptr)->type == T_WORD)
+		{
+			append_arg(&cmd->argv, (*token_ptr)->str);
+			*token_ptr = (*token_ptr)->next;
+		}
+		else
+		{
+			*token_ptr = (*token_ptr)->next;
+		}
+	}
 	return (cmd);
 }
 
