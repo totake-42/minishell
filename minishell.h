@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:30:31 by totake            #+#    #+#             */
-/*   Updated: 2025/12/11 00:27:25 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/17 17:44:38 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include <stdlib.h>   //malloc(), free()
 # include <sys/stat.h> //open() flags
 # include <sys/wait.h> //waitpid()
+# include <termios.h>  //struct termios
 # include <unistd.h>   //fork(), execve(), pid_t
 
 typedef enum e_token_type

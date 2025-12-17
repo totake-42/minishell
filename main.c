@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:52:58 by totake            #+#    #+#             */
-/*   Updated: 2025/12/17 15:56:40 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/17 18:06:32 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,17 @@ void	prompt_loop(t_data *data)
 // add free_all_data before return
 int	main(int argc, char **argv, char **envp)
 {
-	t_data	data;
+	t_data			data;
+	struct termios	termios_p;
 
 	(void)argc;
 	(void)argv;
+	tcgetattr(STDIN_FILENO, &termios_p);
+	if (isatty(STDIN_FILENO) == 0)
+	{
+		ft_putendl_fd("minishell: stdin is not a terminal", STDERR_FILENO);
+		exit(1);
+	}
 	init_data(&data, envp);
 	prompt_loop(&data);
 	return (data.last_status);

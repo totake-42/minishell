@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 14:12:07 by totake            #+#    #+#             */
-/*   Updated: 2025/12/11 00:43:13 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/17 18:07:52 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ int	fork_children(t_cmd *cmd, int **pipes, t_data *data)
 		cmd->is_in_child = 1;
 		if (cmd->pid == 0)
 		{
+			// tcsetattr(STDIN_FILENO, TCSANOW, &termios_p);
 			set_child_sig();
 			child_connect_pipefd_stdfd(data, pipes, i);
 			close_all_pipes(pipes, data->cmd_count);
