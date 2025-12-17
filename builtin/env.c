@@ -6,7 +6,7 @@
 /*   By: yebi <yebi@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 09:57:02 by ebichan           #+#    #+#             */
-/*   Updated: 2025/12/08 12:00:07 by yebi             ###   ########.fr       */
+/*   Updated: 2025/12/17 16:53:50 by yebi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	builtin_env(t_cmd *cmd, t_data *data)
 
 	i = 0;
 	if (print_option_err(cmd) == 1)
-		return (1);
+		return (2);
 	if (ft_argv_len(cmd->argv) != 1)
 	{
 		ft_putendl_fd("minishell: env: too many arguments", STDERR_FILENO);

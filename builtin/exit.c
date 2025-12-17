@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebichan <ebichan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yebi <yebi@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 09:57:11 by ebichan           #+#    #+#             */
-/*   Updated: 2025/12/09 15:19:41 by ebichan          ###   ########.fr       */
+/*   Updated: 2025/12/17 16:53:51 by yebi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,13 @@ static int	is_numeric(char *str)
 	return (1);
 }
 
-static void	exit_err(t_cmd *cmd)
+static void	exit_err(t_cmd *cmd, t_data *data)
 {
 	ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 	ft_putstr_fd(cmd->argv[1], STDERR_FILENO);
 	ft_putendl_fd(": numeric argument required", STDERR_FILENO);
+	if (data != NULL)
+		free_all_data(data);
 	exit(2);
 }
 
@@ -82,22 +84,25 @@ static int	check_overflow(char *str)
 int	builtin_exit(t_cmd *cmd, t_data *data)
 {
 	long	exit_status;
-	
+
+	if (isatty(STDIN_FILENO) && !cmd->is_in_child)
+		ft_putendl_fd("exit", STDERR_FILENO);
 	if (ft_argv_len(cmd->argv) >= 2)
 	{
+		if (is_numeric(cmd->argv[1]) == 0)
+			exit_err(cmd, data);
+		exit_status = ft_atol(cmd->argv[1]);
+		if (exit_status == 2 && check_overflow(cmd->argv[1]))
+			exit_err(cmd, data);
 		if (ft_argv_len(cmd->argv) >= 3)
 		{
 			ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
 			return (1);
 		}
-		if (is_numeric(cmd->argv[1]) == 0)
-			exit_err(cmd);
-		exit_status = ft_atol(cmd->argv[1]);
-		if (exit_status == 2 && check_overflow(cmd->argv[1]))
-			exit_err(cmd);
 		data->last_status = (int)(exit_status % 256);
 	}
+	if (data != NULL)
+		free_all_data(data);
 	exit(data->last_status);
 	return (0);
 }
-// exitのfree処理入れてないから後でやる

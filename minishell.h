@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:30:31 by totake            #+#    #+#             */
-/*   Updated: 2025/12/17 17:44:38 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/17 18:11:55 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,6 +227,7 @@ void					set_heredoc_sig(void);
 int						builtin_echo(t_cmd *cmd, t_data *data);
 int						builtin_cd(t_cmd *cmd, t_data *data);
 int						cd_error(char *path);
+void					update_dir(t_data *data, char *old_pwd, char *new_path);
 void					update_env_var_cd(t_data *data, char *key, char *value);
 int						check_cd_args(t_cmd *cmd);
 void					free_split(char **result);

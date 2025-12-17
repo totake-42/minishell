@@ -1,55 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd_ex_utils.c                                      :+:      :+:    :+:   */
+/*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yebi <yebi@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/08 01:34:49 by ebichan           #+#    #+#             */
-/*   Updated: 2025/12/08 11:59:54 by yebi             ###   ########.fr       */
+/*   Created: 2025/12/17 16:51:22 by ebichan           #+#    #+#             */
+/*   Updated: 2025/12/17 16:53:42 by yebi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	cd_error(char *path)
+int	ft_argv_len(char **argv)
 {
-	ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
-	perror(path);
-	return (1);
+	int	i;
+
+	i = 0;
+	while (argv[i])
+		i++;
+	return (i);
 }
 
-void	update_env_var_cd(t_data *data, char *key, char *value)
+void	free_split(char **result)
 {
-	char	*tmp;
-	char	*new_entry;
+	int	i;
 
-	if (key == NULL || value == NULL)
-		return ;
-	tmp = ft_strjoin(key, "=");
-	if (tmp == NULL)
-		return ;
-	new_entry = ft_strjoin(tmp, value);
-	free(tmp);
-	if (new_entry == NULL)
-		return ;
-	env_deal(data, new_entry);
-	free(new_entry);
-}
-
-int	check_cd_args(t_cmd *cmd)
-{
-	if (ft_argv_len(cmd->argv) >= 3)
+	i = 0;
+	while (result[i] != NULL)
 	{
-		ft_putendl_fd("minishell: cd: too many arguments", STDERR_FILENO);
-		return (1);
+		free(result[i]);
+		i++;
 	}
-	if (cmd->argv[1] && ft_strncmp(cmd->argv[1], "-", 2) != 0)
-	{
-		if (print_option_err(cmd))
-			return (2);
-	}
-	return (0);
+	free(result);
 }
 
 void	ft_lst_del_last(t_list **lst, void (*del)(void *))

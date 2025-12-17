@@ -3,32 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: yebi <yebi@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 01:34:49 by ebichan           #+#    #+#             */
-/*   Updated: 2025/12/10 15:22:31 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/17 17:05:48 by yebi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_split(char **result)
-{
-	int	i;
-
-	i = 0;
-	while (result[i] != NULL)
-	{
-		free(result[i]);
-		i++;
-	}
-	free(result);
-}
-
-int	cd_error(char *path)
+int	cd_error(char *str)
 {
 	ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
-	perror(path);
+	ft_putstr_fd(str, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	if (errno == ENOENT)
+		ft_putendl_fd("No such file or directory", STDERR_FILENO);
+	else if (errno == EACCES)
+		ft_putendl_fd("Permission denied", STDERR_FILENO);
+	else if (errno == ENOTDIR)
+		ft_putendl_fd("Not a directory", STDERR_FILENO);
+	else if (errno == ENAMETOOLONG)
+		ft_putendl_fd("File name too long", STDERR_FILENO);
+	else if (errno == ENOMEM)
+		ft_putendl_fd("Cannot allocate memory", STDERR_FILENO);
+	else if (errno == EIO)
+		ft_putendl_fd("Input/output error", STDERR_FILENO);
+	else
+		ft_putendl_fd(strerror(errno), STDERR_FILENO);
 	return (1);
 }
 
@@ -52,38 +54,23 @@ void	update_env_var_cd(t_data *data, char *key, char *value)
 
 int	check_cd_args(t_cmd *cmd)
 {
-	if (ft_argv_len(cmd->argv) >= 3)
-	{
-		ft_putendl_fd("minishell: cd: too many arguments", STDERR_FILENO);
-		return (1);
-	}
 	if (cmd->argv[1] && ft_strncmp(cmd->argv[1], "-", 2) != 0)
 	{
 		if (print_option_err(cmd))
 			return (2);
 	}
+	if (ft_argv_len(cmd->argv) >= 3)
+	{
+		ft_putendl_fd("minishell: cd: too many arguments", STDERR_FILENO);
+		return (1);
+	}
 	return (0);
 }
 
-void	ft_lst_del_last(t_list **lst, void (*del)(void *))
+void	update_dir(t_data *data, char *old_pwd, char *new_path)
 {
-	t_list	*cur;
-	t_list	*prv;
-
-	if (!lst || !*lst)
-		return ;
-	cur = *lst;
-	prv = NULL;
-	while (cur->next)
-	{
-		prv = cur;
-		cur = cur->next;
-	}
-	if (del)
-		del(cur->content);
-	free(cur);
-	if (prv)
-		prv->next = NULL;
-	else
-		*lst = NULL;
+	if (old_pwd)
+		update_env_var_cd(data, "OLDPWD", old_pwd);
+	if (new_path)
+		update_env_var_cd(data, "PWD", new_path);
 }

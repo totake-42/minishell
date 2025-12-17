@@ -6,7 +6,7 @@
 #    By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/01 02:28:33 by totake            #+#    #+#              #
-#    Updated: 2025/12/17 13:00:25 by totake           ###   ########.fr        #
+#    Updated: 2025/12/17 18:12:19 by totake           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,8 +53,8 @@ SRCS = main.c \
 	builtin/unset.c \
 	builtin/env.c \
 	builtin/exit.c \
-	builtin/ft_argv_len.c \
 	builtin/option_check.c \
+	builtin/builtin_utils.c \
 	debug.c
 
 OBJS = $(SRCS:.c=.o)

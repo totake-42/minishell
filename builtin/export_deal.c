@@ -6,7 +6,7 @@
 /*   By: yebi <yebi@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 14:58:01 by ebichan           #+#    #+#             */
-/*   Updated: 2025/12/08 12:00:12 by yebi             ###   ########.fr       */
+/*   Updated: 2025/12/17 16:53:53 by yebi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,21 @@ static void	update_env_value(t_data *data, int i, char *arg, int append_flag)
 {
 	char	*new_entry;
 	char	*val_start;
+	char	*tmp;
 
 	val_start = ft_strchr(arg, '=');
 	if (val_start == NULL)
 		return ;
 	val_start++;
-	if (append_flag)
+	if (append_flag && ft_strchr(data->envp[i], '=') == NULL)
+	{
+		tmp = ft_strjoin(data->envp[i], "=");
+		if (tmp == NULL)
+			return ;
+		free(data->envp[i]);
+		data->envp[i] = tmp;
+	}
+	if (append_flag && data->envp[i] != NULL)
 		new_entry = ft_strjoin(data->envp[i], val_start);
 	else
 		new_entry = create_clean_env(arg);
