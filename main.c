@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:52:58 by totake            #+#    #+#             */
-/*   Updated: 2025/12/14 19:47:10 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/15 12:50:15 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,17 +62,15 @@ void	prompt_loop(t_data *data)
 		check_readline_sig(data);
 		if (data->line == NULL)
 		{
-			printf("exit\n");
+			ft_putendl_fd("exit", STDOUT_FILENO);
 			break ;
 		}
 		if (data->line[0])
 			add_history(data->line);
 		if (lexer(data) < 0)
 			continue ;
-		// print_tokens(data.token); // For debugging
 		if (parser(data) < 0)
 			continue ;
-		// print_cmds(data.cmd); // For debugging
 		if (heredoc_handler(data) < 0)
 			continue ;
 		if (executer(data) < 0)
@@ -81,6 +79,7 @@ void	prompt_loop(t_data *data)
 	}
 }
 
+// add free_all_data before return
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
@@ -89,6 +88,5 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	init_data(&data, envp);
 	prompt_loop(&data);
-	// free_all_data(&data);
 	return (data.last_status);
 }
