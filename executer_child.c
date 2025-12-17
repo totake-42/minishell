@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 14:12:07 by totake            #+#    #+#             */
-/*   Updated: 2025/12/17 18:07:52 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/17 19:44:00 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ void	execute_child(t_cmd *cmd, t_data *data)
 
 void	child_connect_pipefd_stdfd(t_data *data, int **pipes, size_t cmd_index)
 {
+	if (pipes == NULL)
+		return ;
 	if (cmd_index > 0)
 	{
 		if (dup2(pipes[cmd_index - 1][0], STDIN_FILENO) < 0)
@@ -104,7 +106,7 @@ int	fork_children(t_cmd *cmd, int **pipes, t_data *data)
 		cmd->is_in_child = 1;
 		if (cmd->pid == 0)
 		{
-			// tcsetattr(STDIN_FILENO, TCSANOW, &termios_p);
+			tcsetattr(STDIN_FILENO, TCSANOW, &data->termios_p);
 			set_child_sig();
 			child_connect_pipefd_stdfd(data, pipes, i);
 			close_all_pipes(pipes, data->cmd_count);

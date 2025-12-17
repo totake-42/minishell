@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:52:58 by totake            #+#    #+#             */
-/*   Updated: 2025/12/17 18:06:32 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/17 19:43:48 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ char	**envp_copy(char **envp)
 
 int	init_data(t_data *data, char **envp)
 {
+	tcgetattr(STDIN_FILENO, &data->termios_p);
 	data->line = NULL;
 	data->token = NULL;
 	data->envp = envp_copy(envp);
@@ -82,12 +83,10 @@ void	prompt_loop(t_data *data)
 // add free_all_data before return
 int	main(int argc, char **argv, char **envp)
 {
-	t_data			data;
-	struct termios	termios_p;
+	t_data	data;
 
 	(void)argc;
 	(void)argv;
-	tcgetattr(STDIN_FILENO, &termios_p);
 	if (isatty(STDIN_FILENO) == 0)
 	{
 		ft_putendl_fd("minishell: stdin is not a terminal", STDERR_FILENO);

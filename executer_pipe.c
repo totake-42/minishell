@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 22:30:00 by totake            #+#    #+#             */
-/*   Updated: 2025/12/17 14:23:10 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/17 19:45:02 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,4 +98,5 @@ void	wait_all(t_cmd *cmd, t_data *data)
 			ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
 		current = current->next;
 	}
+	tcsetattr(STDIN_FILENO, TCSANOW, &data->termios_p);
 }

@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:30:31 by totake            #+#    #+#             */
-/*   Updated: 2025/12/17 18:11:55 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/17 19:42:27 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ typedef struct s_data
 	size_t				cmd_count;
 	t_cmd				*cur_cmd;
 	int					last_status;
+	struct termios		termios_p;
 }						t_data;
 
 /* ===== ft_append.c ===== */

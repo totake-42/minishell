@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 18:16:35 by totake            #+#    #+#             */
-/*   Updated: 2025/12/17 15:35:49 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/17 19:10:49 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ t_cmd	*create_cmd_node(t_token **token_ptr)
 	cmd = (t_cmd *)ft_calloc(1, sizeof(t_cmd));
 	cmd->pid = -1;
 	cmd->is_in_child = 0;
+	cmd->argv = NULL;
+	cmd->redirect = NULL;
 	cmd->next = NULL;
 	while (*token_ptr != NULL && (*token_ptr)->type != T_PIPE)
 	{
@@ -77,6 +79,7 @@ t_cmd	*build_cmd_list(t_data *data)
 int	parser(t_data *data)
 {
 	data->cmd = build_cmd_list(data);
+	// print_cmds(data->cmd);
 	free_token_list(data->token);
 	data->token = NULL;
 	return (0);
