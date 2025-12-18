@@ -6,14 +6,13 @@
 #    By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/01 02:28:33 by totake            #+#    #+#              #
-#    Updated: 2025/12/18 14:12:32 by totake           ###   ########.fr        #
+#    Updated: 2025/12/18 18:13:51 by totake           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 CC = cc
-# CFLAGS = -Wall -Wextra -Werror -g
 CFLAGS = -Wall -Wextra -Werror
 LDFLAGS = -lreadline
 
@@ -58,8 +57,7 @@ SRCS = main.c \
 	builtin/env.c \
 	builtin/exit.c \
 	builtin/option_check.c \
-	builtin/builtin_utils.c \
-	debug.c
+	builtin/builtin_utils.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -73,7 +71,6 @@ $(NAME): $(OBJS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -I$(LIBFT_DIR) -I. -c $< -o $@
-# 	$(CC) $(CFLAGS) -I$(LIBFT_DIR) -c $< -o $@
 
 clean:
 	rm -f $(OBJS)
@@ -85,14 +82,4 @@ fclean: clean
 
 re: fclean all
 
-# Test target
-test: test_lexer
-	./test_lexer
-
-test_lexer: test_lexer.c $(filter-out main.o, $(OBJS))
-	$(CC) $(CFLAGS) -I$(LIBFT_DIR) -o test_lexer test_lexer.c $(filter-out main.o, $(OBJS)) $(LIBFT) $(LDFLAGS)
-
-test_clean:
-	rm -f test_lexer
-
-.PHONY: all clean fclean re test test_clean
+.PHONY: all clean fclean re

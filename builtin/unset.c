@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yebi <yebi@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 09:56:40 by ebichan           #+#    #+#             */
-/*   Updated: 2025/12/17 16:54:00 by yebi             ###   ########.fr       */
+/*   Updated: 2025/12/18 18:11:57 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	remove_env(int remove_i, t_data *data)
 	int		j;
 
 	count = ft_argv_len(data->envp);
-	new_envp = (char **)malloc(sizeof(char *) * count);
+	new_envp = (char **)safe_alloc(sizeof(char *) * count);
 	if (new_envp == NULL)
 		return ;
 	i = 0;

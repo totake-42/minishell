@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 14:57:54 by totake            #+#    #+#             */
-/*   Updated: 2025/12/04 22:51:00 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/18 18:04:41 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,48 +104,3 @@ char	**ft_split(char const *s, char c)
 	fill(s, c, ret, s_count);
 	return (ret);
 }
-
-// #include <stdio.h>
-
-// void	print_result(char **result)
-// {
-// 	if (!result)
-// 	{
-// 		printf("NULL\n");
-// 		return ;
-// 	}
-// 	for (int i = 0; result[i]; i++)
-// 		printf("'%s'\n", result[i]);
-// }
-
-// int	main(void)
-// {
-// 	char **result;
-
-// 	// 通常ケース
-// 	result = ft_split("hello world split", ' ');
-// 	printf("test:  (hello world split, ' ')\n");
-// 	print_result(result);
-
-// 	// 区切り文字がない場合
-// 	result = ft_split("nowordhere", ' ');
-// 	printf("test:  (nowordhere, ' ')\n");
-// 	print_result(result);
-
-// 	// 空文字列
-// 	result = ft_split("", ' ');
-// 	printf("test:  (\"\", ' ')\n");
-// 	print_result(result);
-
-// 	// 区切り文字が連続
-// 	result = ft_split("a,,b,c", ',');
-// 	printf("test:  (\"a,,b,c\", ',')\n");
-// 	print_result(result);
-
-// 	// NULL入力
-// 	result = ft_split(NULL, ',');
-// 	printf("test:  (NULL, ',')\n");
-// 	print_result(result);
-
-// 	return (0);
-// }

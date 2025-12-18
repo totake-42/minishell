@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_deal.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yebi <yebi@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 14:58:01 by ebichan           #+#    #+#             */
-/*   Updated: 2025/12/17 16:53:53 by yebi             ###   ########.fr       */
+/*   Updated: 2025/12/18 18:11:37 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static char	*create_clean_env(char *arg)
 	plus_ptr = ft_strnstr(arg, "+=", total_len);
 	if (plus_ptr == NULL)
 		return (ft_strdup(arg));
-	new_str = (char *)malloc(sizeof(char) * total_len);
+	new_str = (char *)safe_alloc(sizeof(char) * total_len);
 	if (new_str == NULL)
 		return (NULL);
 	ft_strlcpy(new_str, arg, (plus_ptr - arg) + 1);
@@ -85,7 +85,7 @@ static void	add_new_env(t_data *data, char *arg)
 	if (clean_arg == NULL)
 		return ;
 	count = ft_argv_len(data->envp);
-	new_envp = (char **)malloc(sizeof(char *) * (count + 2));
+	new_envp = (char **)safe_alloc(sizeof(char *) * (count + 2));
 	if (new_envp == NULL)
 	{
 		free(clean_arg);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_sort.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yebi <yebi@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 14:15:40 by ebichan           #+#    #+#             */
-/*   Updated: 2025/12/17 16:53:54 by yebi             ###   ########.fr       */
+/*   Updated: 2025/12/18 18:11:48 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	print_sorted_env(char **envp)
 	int		i;
 
 	count = ft_argv_len(envp);
-	sorted_env = (char **)malloc(sizeof(char *) * (count + 1));
+	sorted_env = (char **)safe_alloc(sizeof(char *) * (count + 1));
 	if (sorted_env == NULL)
 		return ;
 	i = 0;
