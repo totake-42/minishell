@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:52:58 by totake            #+#    #+#             */
-/*   Updated: 2025/12/17 19:43:48 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/18 13:40:32 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ char	**envp_copy(char **envp)
 
 int	init_data(t_data *data, char **envp)
 {
-	tcgetattr(STDIN_FILENO, &data->termios_p);
+	if (tcgetattr(STDIN_FILENO, &data->termios_p) < 0)
+		perror("tcgetattr");
 	data->line = NULL;
 	data->token = NULL;
 	data->envp = envp_copy(envp);

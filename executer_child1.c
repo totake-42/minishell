@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 13:24:44 by totake            #+#    #+#             */
-/*   Updated: 2025/12/18 13:25:53 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/18 13:39:11 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,11 @@ void	child_connect_pipefd_stdfd(t_data *data, int **pipes, size_t cmd_index)
 
 void	setup_child_io(t_data *data, int **pipes, size_t i)
 {
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &data->termios_p) < 0)
+	{
+		perror("tcsetattr");
+		exit(1);
+	}
 	set_child_sig();
 	child_connect_pipefd_stdfd(data, pipes, i);
 	close_all_pipes(pipes, data->cmd_count);
