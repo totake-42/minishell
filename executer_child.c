@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 14:12:07 by totake            #+#    #+#             */
-/*   Updated: 2025/12/17 20:40:37 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/18 12:16:04 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,30 @@ char	*get_execve_path(char *name, t_data *data)
 {
 	char	*path;
 	char	**paths;
-	char	tmp[2];
 
 	if (ft_strchr(name, '/'))
-		return (ft_strdup(name));
-	path = get_env_value("PATH", data);
-	if (path == NULL)
 	{
-		ft_strlcpy(tmp, ".", 2);
-		path = tmp;
+		if (access(name, F_OK) != 0)
+		{
+			errno = ENOENT;
+			return (NULL);
+		}
+		if (access(name, X_OK) != 0)
+		{
+			errno = EACCES;
+			return (NULL);
+		}
+		return (name);
+	}
+	path = get_env_value("PATH", data);
+	if (path == NULL || *path == '\0')
+	{
+		errno = ENOENT;
+		return (NULL);
 	}
 	paths = ft_split(path, ':');
+	// free path copy returned from get_env_value
+	safe_free((void **)&path);
 	return (search_paths(paths, name));
 }
 
@@ -35,41 +48,62 @@ char	*search_paths(char **paths, char *name)
 	size_t	i;
 	char	*full_path;
 	char	*tmp;
+	int		found;
 
 	i = 0;
-	while (paths[i] != NULL)
+	found = 0;
+	while (paths && paths[i] != NULL)
 	{
 		tmp = ft_strjoin(paths[i], "/");
-		printf("tmp: %s\n", tmp);
 		full_path = ft_strjoin(tmp, name);
 		safe_free((void **)&tmp);
+		if (access(full_path, F_OK) == 0)
+			found = 1;
 		if (access(full_path, X_OK) == 0)
+		{
+			free_split(paths);
 			return (full_path);
+		}
 		safe_free((void **)&full_path);
 		i++;
 	}
+	free_split(paths);
+	if (found)
+		errno = EACCES;
+	else
+		errno = ENOENT;
 	return (NULL);
 }
 
 void	execute_child(t_cmd *cmd, t_data *data)
 {
 	char	*path;
+	char	*env_value;
 
 	if (!cmd->argv || !cmd->argv[0])
 		exit(data->last_status);
 	if (is_builtin(cmd->argv[0]))
 		exit(execute_builtin(cmd, data));
 	path = get_execve_path(cmd->argv[0], data);
+	env_value = get_env_value("PATH", data);
 	if (path == NULL)
 	{
-		write(2, "minishell: ", 12);
-		write(2, cmd->argv[0], ft_strlen(cmd->argv[0]));
-		write(2, ": command not found\n", 20);
-		// ft_putendl_fd("minishell: command not found", 2);
-		if (errno == ENOENT)
+		write(2, "minishell: ", 11);
+		if (!ft_strchr(cmd->argv[0], '/') && env_value != NULL && env_value[0]
+			&& errno == ENOENT)
+		{
+			write(2, cmd->argv[0], ft_strlen(cmd->argv[0]));
+			write(2, ": command not found\n", 20);
 			exit(127);
+		}
 		else
-			exit(126);
+		{
+			perror(cmd->argv[0]);
+			if (errno == ENOENT)
+				exit(127);
+			else
+				exit(126);
+		}
 	}
 	execve(path, cmd->argv, data->envp);
 	perror(cmd->argv[0]);
