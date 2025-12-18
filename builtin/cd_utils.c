@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yebi <yebi@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 01:34:49 by ebichan           #+#    #+#             */
-/*   Updated: 2025/12/17 17:05:48 by yebi             ###   ########.fr       */
+/*   Updated: 2025/12/18 23:20:25 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,13 @@ int	check_cd_args(t_cmd *cmd)
 
 void	update_dir(t_data *data, char *old_pwd, char *new_path)
 {
+	char	*pwd_env;
+
 	if (old_pwd)
 		update_env_var_cd(data, "OLDPWD", old_pwd);
-	if (new_path)
+	pwd_env = get_env_value("PWD", data);
+	if (new_path && pwd_env)
 		update_env_var_cd(data, "PWD", new_path);
+	if (pwd_env)
+		free(pwd_env);
 }
