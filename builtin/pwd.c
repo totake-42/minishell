@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yebi <yebi@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 09:56:25 by ebichan           #+#    #+#             */
-/*   Updated: 2025/12/17 16:53:58 by yebi             ###   ########.fr       */
+/*   Updated: 2025/12/18 19:52:12 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,21 @@ static int	is_pwd_valid(char *pwd_val)
 	return (0);
 }
 
+static int	pwd_check(char *pwd)
+{
+	if (pwd != NULL)
+	{
+		ft_putendl_fd(pwd, STDOUT_FILENO);
+		free(pwd);
+		return (0);
+	}
+	else
+	{
+		perror("minishell: pwd");
+		return (1);
+	}
+}
+
 int	builtin_pwd(t_cmd *cmd, t_data *data)
 {
 	char	*pwd;
@@ -46,10 +61,11 @@ int	builtin_pwd(t_cmd *cmd, t_data *data)
 		cwd = getcwd(NULL, 0);
 		if (cwd == NULL)
 		{
-			perror("minishell: pwd");
-			return (1);
+			if (pwd_check(pwd))
+				return (1);
 		}
-		ft_putendl_fd(cwd, STDOUT_FILENO);
+		else
+			ft_putendl_fd(cwd, STDOUT_FILENO);
 		free(cwd);
 	}
 	return (0);

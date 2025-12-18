@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yebi <yebi@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 09:57:11 by ebichan           #+#    #+#             */
-/*   Updated: 2025/12/17 16:53:51 by yebi             ###   ########.fr       */
+/*   Updated: 2025/12/18 18:44:53 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static long	ft_atol(char *str)
 	while (*str >= '0' && *str <= '9')
 	{
 		if (sign == 1 && (result > LLONG_MAX / 10 || (result == LLONG_MAX / 10
-					&& (*str - '0') >= LLONG_MAX % 10)))
+					&& (*str - '0') > LLONG_MAX % 10)))
 			return (2);
 		if (sign == -1 && (result > -(LLONG_MIN / 10) || (result == -(LLONG_MIN
 						/ 10) && (*str - '0') > -(LLONG_MIN % 10))))
