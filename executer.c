@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 20:09:57 by totake            #+#    #+#             */
-/*   Updated: 2025/12/18 15:52:29 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/18 17:13:49 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,19 +84,22 @@ int	executer(t_data *data)
 		if (execute_single_builtin(data) < 0)
 		{
 			safe_free((void **)&data->line);
-			free_cmd_list(data->cmd);
 			unlink_heredoc_files(data->cmd);
+			free_cmd_list(data->cmd);
+			data->cmd = NULL;
 			return (-1);
 		}
 	}
 	else if (execute_multiple_commands(data) < 0)
 	{
 		safe_free((void **)&data->line);
-		free_cmd_list(data->cmd);
 		unlink_heredoc_files(data->cmd);
+		free_cmd_list(data->cmd);
+		data->cmd = NULL;
 		return (-1);
 	}
 	unlink_heredoc_files(data->cmd);
 	free_cmd_list(data->cmd);
+	data->cmd = NULL;
 	return (0);
 }

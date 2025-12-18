@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 13:26:29 by totake            #+#    #+#             */
-/*   Updated: 2025/12/18 13:28:00 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/18 16:26:41 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ char	*get_execve_path(char *name, t_data *data)
 	char	*path;
 	char	**paths;
 
+	if (!name || name[0] == '\0')
+	{
+		errno = ENOENT;
+		return (NULL);
+	}
 	if (ft_strchr(name, '/'))
 	{
 		if (!check_slash_target(name))

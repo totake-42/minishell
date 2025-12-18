@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:52:58 by totake            #+#    #+#             */
-/*   Updated: 2025/12/18 14:32:54 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/18 17:07:49 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,6 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	if (isatty(STDIN_FILENO) == 0)
-	{
-		ft_putendl_fd("minishell: stdin is not a terminal", STDERR_FILENO);
-		exit(1);
-	}
 	init_data(&data, envp);
 	prompt_loop(&data);
 	free_all_data(&data);
