@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:30:31 by totake            #+#    #+#             */
-/*   Updated: 2025/12/17 19:42:27 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/18 13:27:22 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,7 @@ void					execute_child(t_cmd *cmd, t_data *data);
 void					child_connect_pipefd_stdfd(t_data *data, int **pipes,
 							size_t cmd_index);
 int						fork_children(t_cmd *cmd, int **pipes, t_data *data);
+void					print_cmd_not_found(char *cmd);
 
 /* ===== heredoc_utils.c ===== */
 void					unlink_heredoc_files(t_cmd *cmd);

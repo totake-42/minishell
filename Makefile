@@ -6,7 +6,7 @@
 #    By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/01 02:28:33 by totake            #+#    #+#              #
-#    Updated: 2025/12/17 19:11:10 by totake           ###   ########.fr        #
+#    Updated: 2025/12/18 13:29:10 by totake           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,8 @@ SRCS = main.c \
 	executer.c \
 	executer_pipe.c \
 	executer_builtin.c \
-	executer_child.c \
+	executer_child1.c \
+	executer_child2.c \
 	executer_redirect.c \
 	heredoc.c \
 	heredoc_utils.c \
