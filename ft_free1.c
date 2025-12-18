@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 14:02:12 by totake            #+#    #+#             */
-/*   Updated: 2025/12/18 14:02:14 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/18 14:30:36 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	free_token_list(t_token *token)
 		next = current->next;
 		if (current->str != NULL)
 			safe_free((void **)&current->str);
+		if (current->raw_str != NULL)
+			safe_free((void **)&current->raw_str);
 		safe_free((void **)&current);
 		current = next;
 	}
@@ -92,4 +94,6 @@ void	free_all_data(t_data *data)
 	data->token = NULL;
 	free_cmd_list(data->cmd);
 	data->cmd = NULL;
+	free_envp(data->envp);
+	data->envp = NULL;
 }

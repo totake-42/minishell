@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:52:58 by totake            #+#    #+#             */
-/*   Updated: 2025/12/18 13:40:32 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/18 14:32:54 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,6 @@ int	main(int argc, char **argv, char **envp)
 	}
 	init_data(&data, envp);
 	prompt_loop(&data);
+	free_all_data(&data);
 	return (data.last_status);
 }
