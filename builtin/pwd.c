@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 09:56:25 by ebichan           #+#    #+#             */
-/*   Updated: 2025/12/18 19:52:12 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/19 00:10:41 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static int	pwd_check(char *pwd)
 	if (pwd != NULL)
 	{
 		ft_putendl_fd(pwd, STDOUT_FILENO);
-		free(pwd);
 		return (0);
 	}
 	else
@@ -54,7 +53,7 @@ int	builtin_pwd(t_cmd *cmd, t_data *data)
 	if (pwd != NULL && ft_strlen(pwd) > 0 && is_pwd_valid(pwd))
 	{
 		ft_putendl_fd(pwd, STDOUT_FILENO);
-		free(pwd);
+		safe_free((void **)&pwd);
 	}
 	else
 	{
@@ -66,7 +65,8 @@ int	builtin_pwd(t_cmd *cmd, t_data *data)
 		}
 		else
 			ft_putendl_fd(cwd, STDOUT_FILENO);
-		free(cwd);
+		safe_free((void **)&pwd);
+		safe_free((void **)&cwd);
 	}
 	return (0);
 }
