@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 14:30:31 by totake            #+#    #+#             */
-/*   Updated: 2025/12/18 13:27:22 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/18 14:12:12 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,15 @@ typedef enum e_token_type
 	T_REDIRECT_OUT,
 	T_APPEND,
 	T_HEREDOC
-}						t_token_type;
+}								t_token_type;
 
 typedef struct s_token
 {
-	t_token_type		type;
-	char				*str;
-	char				*raw_str;
-	struct s_token		*next;
-}						t_token;
+	t_token_type				type;
+	char						*str;
+	char						*raw_str;
+	struct s_token				*next;
+}								t_token;
 
 typedef enum e_redirect_type
 {
@@ -54,196 +54,210 @@ typedef enum e_redirect_type
 	R_OUTPUT,
 	R_APPEND,
 	R_HEREDOC
-}						t_redirect_type;
+}								t_redirect_type;
 
 typedef struct s_redirect
 {
-	t_redirect_type		type;
-	char				*filename;
-	int					should_expand;
-	struct s_redirect	*next;
-}						t_redirect;
+	t_redirect_type				type;
+	char						*filename;
+	int							should_expand;
+	struct s_redirect			*next;
+}								t_redirect;
 
 typedef struct s_cmd
 {
-	char				**argv;
-	t_redirect			*redirect;
-	pid_t				pid;
-	int					is_in_child;
-	struct s_cmd		*next;
-}						t_cmd;
+	char						**argv;
+	t_redirect					*redirect;
+	pid_t						pid;
+	int							is_in_child;
+	struct s_cmd				*next;
+}								t_cmd;
 
 typedef struct s_data
 {
-	char				*line;
-	t_token				*token;
-	char				**envp;
-	t_cmd				*cmd;
-	size_t				cmd_count;
-	t_cmd				*cur_cmd;
-	int					last_status;
-	struct termios		termios_p;
-}						t_data;
+	char						*line;
+	t_token						*token;
+	char						**envp;
+	t_cmd						*cmd;
+	size_t						cmd_count;
+	t_cmd						*cur_cmd;
+	int							last_status;
+	struct termios				termios_p;
+}								t_data;
 
+extern volatile sig_atomic_t	g_flag;
 /* ===== ft_append.c ===== */
-char					*ft_charappend(char *str, char c, size_t *len);
-char					*ft_strappend(char *str, char *append_str, size_t *len);
+char							*ft_charappend(char *str, char c, size_t *len);
+char							*ft_strappend(char *str, char *append_str,
+									size_t *len);
 
-/* ===== ft_free.c ===== */
-void					safe_free(void **ptr);
-void					free_token_list(t_token *token);
-void					free_redirect_list(t_redirect *redirect);
-void					free_cmd_list(t_cmd *cmd);
-void					free_envp(char **envp);
-
-void					free_all_data(t_data *data);
+/* ===== ft_free1.c ===== */
+void							free_token_list(t_token *token);
+void							free_redirect_list(t_redirect *redirect);
+void							free_cmd_list(t_cmd *cmd);
+void							free_envp(char **envp);
+void							free_all_data(t_data *data);
+/* ===== ft_free2.c ===== */
+void							safe_free(void **ptr);
 
 /* ===== ft_error.c ===== */
-void					exit_with_error(char *message, int exit_code,
-							t_data *data);
+void							exit_with_error(char *message, int exit_code,
+									t_data *data);
 
 /* ===== ft_mkstemp.c ===== */
-int						ft_mkstemp(char *template);
+int								ft_mkstemp(char *template);
 
 /* ===== lexer.c ===== */
-void					append_token(t_token **head, t_token *new_token);
-void					skip_whitespace(char **line);
-t_token					*create_token_node(char *ptr, size_t len, t_data *data);
-t_token					*build_token_list(t_data *data);
-int						lexer(t_data *data);
+void							append_token(t_token **head,
+									t_token *new_token);
+void							skip_whitespace(char **line);
+t_token							*create_token_node(char *ptr, size_t len,
+									t_data *data);
+t_token							*build_token_list(t_data *data);
+int								lexer(t_data *data);
 
 /* ===== lexer_ctype.c ===== */
-int						is_whitespace(char c);
-int						is_delimiter(char c);
-int						is_quote(char c);
-int						is_special_in_dquote(char c);
+int								is_whitespace(char c);
+int								is_delimiter(char c);
+int								is_quote(char c);
+int								is_special_in_dquote(char c);
 
 /* ===== lexer_token_type.c ===== */
-t_token_type			detect_token_type(char *str);
-t_token_type			detect_delimiter_type(char *str);
+t_token_type					detect_token_type(char *str);
+t_token_type					detect_delimiter_type(char *str);
 
 /* ===== lexer_token_len.c ===== */
-size_t					count_quoted_len(char *str, char quote_char,
-							t_data *data);
-size_t					count_plain_len(char *str);
-size_t					next_token_len(char *str, t_data *data);
+size_t							count_quoted_len(char *str, char quote_char,
+									t_data *data);
+size_t							count_plain_len(char *str);
+size_t							next_token_len(char *str, t_data *data);
 
 /* ===== lexer_check.c ===== */
-int						has_unclosed_quote(char *str);
-int						check_token(t_token *token);
+int								has_unclosed_quote(char *str);
+int								check_token(t_token *token);
 
 /* ===== expand.c ===== */
-char					*handle_single_quote(char *raw_str, t_data *data);
-char					*handle_double_quote(char *raw_str, t_data *data);
-char					*handle_plain_string(char *raw_str, t_data *data);
-char					*expand_raw_str(char *raw_str, t_data *data);
+char							*handle_single_quote(char *raw_str,
+									t_data *data);
+char							*handle_double_quote(char *raw_str,
+									t_data *data);
+char							*handle_plain_string(char *raw_str,
+									t_data *data);
+char							*expand_raw_str(char *raw_str, t_data *data);
 
 /* ===== expand_utils.c ===== */
-char					*get_env_value(char *key, t_data *data);
-char					*extract_var_key(char *str);
-char					*expand_dollar(char *str, size_t *i, t_data *data);
-char					*expand_str(char *str, t_data *data);
+char							*get_env_value(char *key, t_data *data);
+char							*extract_var_key(char *str);
+char							*expand_dollar(char *str, size_t *i,
+									t_data *data);
+char							*expand_str(char *str, t_data *data);
 
 /* ===== main.c ===== */
-char					**envp_copy(char **envp);
-int						init_data(t_data *data, char **envp);
+char							**envp_copy(char **envp);
+int								init_data(t_data *data, char **envp);
 
 /* ===== debug.c ===== */
-void					print_tokens(t_token *token);
-void					print_cmds(t_cmd *cmd);
+void							print_tokens(t_token *token);
+void							print_cmds(t_cmd *cmd);
 
 /* ===== parser.c ===== */
-t_cmd					*create_cmd_node(t_token **token_ptr);
-t_cmd					*build_cmd_list(t_data *data);
-int						parser(t_data *data);
+t_cmd							*create_cmd_node(t_token **token_ptr);
+t_cmd							*build_cmd_list(t_data *data);
+int								parser(t_data *data);
 
 /* ===== parser_argv.c ===== */
-void					append_arg(char ***argv, char *arg);
-char					**build_argv(t_token **token_ptr);
+void							append_arg(char ***argv, char *arg);
+char							**build_argv(t_token **token_ptr);
 
 /* ===== parser_redirect.c ===== */
-int						is_redirect(t_token_type type);
-void					append_redirect(t_redirect **head,
-							t_redirect *new_redirect);
-t_redirect_type			token_type_to_redirect_type(t_token_type type);
-t_redirect				*create_redirect_node(t_token **token_ptr);
-t_redirect				*build_redirects(t_token **token_ptr);
-void					append_cmd(t_cmd **head, t_cmd *new_cmd);
+int								is_redirect(t_token_type type);
+void							append_redirect(t_redirect **head,
+									t_redirect *new_redirect);
+t_redirect_type					token_type_to_redirect_type(t_token_type type);
+t_redirect						*create_redirect_node(t_token **token_ptr);
+t_redirect						*build_redirects(t_token **token_ptr);
+void							append_cmd(t_cmd **head, t_cmd *new_cmd);
 
 /* ===== executer.c ===== */
-int						execute_multiple_commands(t_data *data);
-int						execute_single_builtin(t_data *data);
-size_t					count_commands(t_cmd *cmd);
-int						executer(t_data *data);
+int								execute_multiple_commands(t_data *data);
+int								execute_single_builtin(t_data *data);
+size_t							count_commands(t_cmd *cmd);
+int								executer(t_data *data);
 
 /* ===== executer_builtin.c ===== */
-int						execute_builtin(t_cmd *cmd, t_data *data);
-int						is_builtin(char *cmd);
+int								execute_builtin(t_cmd *cmd, t_data *data);
+int								is_builtin(char *cmd);
 
 /* ===== executer_redirect.c ===== */
-int						open_redirect_file(t_redirect *redirect);
-int						save_stdio_ofd(int *stdin_ofd, int *stdout_ofd);
-void					restore_stdio(int stdin_ofd, int stdout_ofd);
-int						apply_single_redirect(t_redirect *r);
-int						apply_all_redirects(t_redirect *redirect);
+int								open_redirect_file(t_redirect *redirect);
+int								save_stdio_ofd(int *stdin_ofd, int *stdout_ofd);
+void							restore_stdio(int stdin_ofd, int stdout_ofd);
+int								apply_single_redirect(t_redirect *r);
+int								apply_all_redirects(t_redirect *redirect);
 
 /* ===== executer_pipe.c ===== */
-int						**cleate_all_pipes(size_t cmd_count);
-void					close_all_pipes(int **pipes, size_t cmd_count);
-void					wait_all(t_cmd *cmd, t_data *data);
-void					free_all_pipes(int **pipes, size_t cmd_count);
-int						status_from_signal(int status, int *sigint_flag);
+int								**cleate_all_pipes(size_t cmd_count);
+void							close_all_pipes(int **pipes, size_t cmd_count);
+void							wait_all(t_cmd *cmd, t_data *data);
+void							free_all_pipes(int **pipes, size_t cmd_count);
+int								status_from_signal(int status,
+									int *sigint_flag);
 
 /* ===== executer_child.c ===== */
-char					*get_execve_path(char *name, t_data *data);
-char					*search_paths(char **paths, char *name);
-void					execute_child(t_cmd *cmd, t_data *data);
-void					child_connect_pipefd_stdfd(t_data *data, int **pipes,
-							size_t cmd_index);
-int						fork_children(t_cmd *cmd, int **pipes, t_data *data);
-void					print_cmd_not_found(char *cmd);
+char							*get_execve_path(char *name, t_data *data);
+char							*search_paths(char **paths, char *name);
+void							execute_child(t_cmd *cmd, t_data *data);
+void							child_connect_pipefd_stdfd(t_data *data,
+									int **pipes, size_t cmd_index);
+int								fork_children(t_cmd *cmd, int **pipes,
+									t_data *data);
+void							print_cmd_not_found(char *cmd);
 
 /* ===== heredoc_utils.c ===== */
-void					unlink_heredoc_files(t_cmd *cmd);
-int						handle_heredoc(t_redirect *redirect, t_data *data);
-int						handle_heredocs(t_cmd *cmd, t_data *data);
-int						heredoc_handler(t_data *data);
+void							unlink_heredoc_files(t_cmd *cmd);
+int								handle_heredoc(t_redirect *redirect,
+									t_data *data);
+int								handle_heredocs(t_cmd *cmd, t_data *data);
+int								heredoc_handler(t_data *data);
 
 /* ===== heredoc_utils.c ===== */
-int						create_heredoc_file(char *template);
-void					write_heredoc_line(int fd, char *line,
-							int should_expand, t_data *data);
-int						read_heredoc_content(const char *delimiter, int fd,
-							int should_expand, t_data *data);
-int						fork_heredoc_child(int fd, t_redirect *redirect,
-							t_data *data);
+int								create_heredoc_file(char *template);
+void							write_heredoc_line(int fd, char *line,
+									int should_expand, t_data *data);
+int								read_heredoc_content(const char *delimiter,
+									int fd, int should_expand, t_data *data);
+int								fork_heredoc_child(int fd, t_redirect *redirect,
+									t_data *data);
 
 /* ===== signal.c ===== */
-void					check_readline_sig(t_data *data);
-void					set_readline_sig(void);
-void					set_child_sig(void);
-void					set_ignore_sig(void);
-void					set_heredoc_sig(void);
+void							check_readline_sig(t_data *data);
+void							set_readline_sig(void);
+void							set_child_sig(void);
+void							set_ignore_sig(void);
+void							set_heredoc_sig(void);
 
 /* ===== builtin ===== */
-int						builtin_echo(t_cmd *cmd, t_data *data);
-int						builtin_cd(t_cmd *cmd, t_data *data);
-int						cd_error(char *path);
-void					update_dir(t_data *data, char *old_pwd, char *new_path);
-void					update_env_var_cd(t_data *data, char *key, char *value);
-int						check_cd_args(t_cmd *cmd);
-void					free_split(char **result);
-char					*solve_logic_path(char *base, char *dst);
-void					ft_lst_del_last(t_list **lst, void (*del)(void *));
-int						builtin_pwd(t_cmd *cmd, t_data *data);
-int						builtin_export(t_cmd *cmd, t_data *data);
-int						builtin_unset(t_cmd *cmd, t_data *data);
-int						find_env(char *key, t_data *data);
-int						builtin_env(t_cmd *cmd, t_data *data);
-void					print_sorted_env(char **envp);
-void					env_deal(t_data *data, char *arg);
-int						builtin_exit(t_cmd *cmd, t_data *data);
-int						ft_argv_len(char **argv);
-int						print_option_err(t_cmd *cmd);
+int								builtin_echo(t_cmd *cmd, t_data *data);
+int								builtin_cd(t_cmd *cmd, t_data *data);
+int								cd_error(char *path);
+void							update_dir(t_data *data, char *old_pwd,
+									char *new_path);
+void							update_env_var_cd(t_data *data, char *key,
+									char *value);
+int								check_cd_args(t_cmd *cmd);
+void							free_split(char **result);
+char							*solve_logic_path(char *base, char *dst);
+void							ft_lst_del_last(t_list **lst,
+									void (*del)(void *));
+int								builtin_pwd(t_cmd *cmd, t_data *data);
+int								builtin_export(t_cmd *cmd, t_data *data);
+int								builtin_unset(t_cmd *cmd, t_data *data);
+int								find_env(char *key, t_data *data);
+int								builtin_env(t_cmd *cmd, t_data *data);
+void							print_sorted_env(char **envp);
+void							env_deal(t_data *data, char *arg);
+int								builtin_exit(t_cmd *cmd, t_data *data);
+int								ft_argv_len(char **argv);
+int								print_option_err(t_cmd *cmd);
 
 #endif

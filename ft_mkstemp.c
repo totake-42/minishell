@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 15:58:48 by totake            #+#    #+#             */
-/*   Updated: 2025/12/09 18:17:47 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/18 14:04:14 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	ft_mkstemp(char *template)
 		ft_memset(x_pos, '0', 6);
 		ft_memcpy(&x_pos[6 - ft_strlen(temp_str)], temp_str,
 			ft_strlen(temp_str));
-		// printf("Trying template: %s\n", template);
 		safe_free((void **)&temp_str);
 		fd = open(template, O_WRONLY | O_CREAT | O_EXCL, 0600);
 		if (fd >= 0)

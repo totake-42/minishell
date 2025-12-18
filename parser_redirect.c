@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 16:41:07 by totake            #+#    #+#             */
-/*   Updated: 2025/12/17 16:07:49 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/18 14:07:31 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_redirect_type	token_type_to_redirect_type(t_token_type type)
 
 t_redirect	*create_redirect_node(t_token **token_ptr)
 {
-	t_redirect *redirect;
+	t_redirect	*redirect;
 
 	if (!token_ptr || !*token_ptr || !is_redirect((*token_ptr)->type))
 		return (NULL);

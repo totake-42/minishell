@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   signal1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/08 12:49:55 by totake            #+#    #+#             */
-/*   Updated: 2025/12/15 12:04:35 by totake           ###   ########.fr       */
+/*   Created: 2025/12/18 14:09:26 by totake            #+#    #+#             */
+/*   Updated: 2025/12/18 14:09:54 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,6 @@ void	handler(int sig)
 		write(STDOUT_FILENO, "\n", 1);
 		rl_on_new_line();
 		rl_redisplay();
-	}
-}
-
-// Notify readline that we are starting a new line (reset internal state)
-// rl_on_new_line();
-// Replace the current input line with an empty string (clear user input)
-// rl_replace_line("", 0);
-// Redraw the prompt and the (now empty) input line on the screen
-// rl_redisplay();
-void	check_readline_sig(t_data *data)
-{
-	if (g_flag == SIGINT)
-	{
-		data->last_status = 128 + SIGINT;
-		g_flag = 0;
 	}
 }
 

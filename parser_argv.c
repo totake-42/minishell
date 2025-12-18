@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 16:39:16 by totake            #+#    #+#             */
-/*   Updated: 2025/12/17 15:28:45 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/18 14:06:51 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@
 // argv = ["echo", "hello", "world", NULL]
 void	append_arg(char ***argv, char *arg)
 {
-	char **new_argv;
-	size_t count;
-	size_t i;
+	char	**new_argv;
+	size_t	count;
+	size_t	i;
 
 	count = 0;
 	if (*argv)

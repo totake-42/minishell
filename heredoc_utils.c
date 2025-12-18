@@ -6,7 +6,7 @@
 /*   By: totake <totake@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 23:37:36 by totake            #+#    #+#             */
-/*   Updated: 2025/12/10 12:51:15 by totake           ###   ########.fr       */
+/*   Updated: 2025/12/18 13:50:54 by totake           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ int	wait_heredoc_child(pid_t pid, t_data *data)
 	int	status;
 
 	set_ignore_sig();
-	waitpid(pid, &status, 0);
+	if (waitpid(pid, &status, 0) < 0)
+		perror("waitpid");
 	set_readline_sig();
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 	{
