@@ -1,1 +1,8 @@
 minishell_tester
+minishell-tester
+a.out
+minishell
+*.o
+minitester-minishell-tester
+hoge
+minishell.supp
